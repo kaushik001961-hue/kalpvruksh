@@ -30,21 +30,21 @@ export default function Navbar() {
           🌿 Kalpvruksh
         </Link>
 
-        <nav className="hidden md:flex gap-8">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`font-medium transition ${
-                pathname === link.href
-                  ? "text-green-700"
-                  : "text-gray-700 hover:text-green-700"
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </nav>
+       <nav className="hidden md:flex gap-8">
+  {navLinks.map((link) => (
+    <Link
+      key={link.href}
+      href={link.href}
+      className={`font-medium transition ${
+        pathname === link.href
+          ? "text-green-700"
+          : "text-gray-700 hover:text-green-700"
+      }`}
+    >
+      {link.name}
+    </Link>
+  ))}
+</nav>
 
 <Link
   href="/donate"
