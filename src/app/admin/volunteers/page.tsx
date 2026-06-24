@@ -1,4 +1,6 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
 
 interface PageProps {
   searchParams: Promise<{
@@ -16,137 +18,134 @@ export default async function VolunteersPage({
       ? {
           OR: [
             {
-              user: {
-                name: {
-                  contains: search,
-                  mode: "insensitive",
-                },
+              name: {
+                contains: search,
+                mode: "insensitive" as const,
               },
             },
             {
-              user: {
-                email: {
-                  contains: search,
-                  mode: "insensitive",
-                },
+              email: {
+                contains: search,
+                mode: "insensitive" as const,
               },
             },
             {
               city: {
                 contains: search,
-                mode: "insensitive",
+                mode: "insensitive" as const,
               },
             },
             {
               interest: {
                 contains: search,
-                mode: "insensitive",
+                mode: "insensitive" as const,
               },
             },
           ],
         }
       : undefined,
-
-    include: {
-      user: true,
-    },
-
     orderBy: {
       createdAt: "desc",
     },
   });
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
+    <div className="p-6 max-w-7xl mx-auto space-y-6">
+      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
             Volunteers Management
           </h1>
-          <p className="text-slate-600">
-            View and manage volunteers
+          <p className="text-slate-500 text-sm mt-1">
+            View and manage platform volunteer registrations.
           </p>
         </div>
       </div>
 
       {/* Search Box */}
-      <form className="mb-6">
+      <form method="GET" className="mb-6">
         <input
           type="text"
           name="search"
-          defaultValue={search}
+          defaultValue={search || ""}
           placeholder="Search by name, email, city, interest..."
-          className="w-full max-w-md border rounded-lg px-4 py-2"
+          className="w-full max-w-md border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 bg-white"
         />
       </form>
 
       {/* Stats */}
-      <div className="mb-4">
-        <p className="text-sm text-slate-600">
+      <div className="mb-2">
+        <p className="text-sm font-medium text-slate-600">
           Total Results: {volunteers.length}
         </p>
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-slate-100">
-            <tr>
-              <th className="p-4 text-left">Name</th>
-              <th className="p-4 text-left">Email</th>
-              <th className="p-4 text-left">Phone</th>
-              <th className="p-4 text-left">City</th>
-              <th className="p-4 text-left">Interest</th>
-              <th className="p-4 text-left">Joined</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {volunteers.length === 0 ? (
+      <div className="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead className="bg-slate-50 border-b text-slate-700 font-semibold">
               <tr>
-                <td
-                  colSpan={6}
-                  className="p-6 text-center"
-                >
-                  No volunteers found.
-                </td>
+                <th className="p-4">Name</th>
+                <th className="p-4">Email</th>
+                <th className="p-4">Phone</th>
+                <th className="p-4">City</th>
+                <th className="p-4">Interest</th>
+                <th className="p-4">Joined</th>
               </tr>
-            ) : (
-              volunteers.map((volunteer) => (
-                <tr
-                  key={volunteer.id}
-                  className="border-t hover:bg-slate-50"
-                >
-                  <td className="p-4">
-                    {volunteer.user.name}
-                  </td>
+            </thead>
 
-                  <td className="p-4">
-                    {volunteer.user.email}
-                  </td>
-
-                  <td className="p-4">
-                    {volunteer.phone}
-                  </td>
-
-                  <td className="p-4">
-                    {volunteer.city}
-                  </td>
-
-                  <td className="p-4">
-                    {volunteer.interest}
-                  </td>
-
-                  <td className="p-4">
-                    {new Date(
-                      volunteer.createdAt
-                    ).toLocaleDateString()}
+            <tbody className="divide-y divide-gray-100">
+              {volunteers.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="p-8 text-center text-gray-400 font-medium"
+                  >
+                    No volunteers found matching your query.
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                volunteers.map((volunteer) => (
+                  <tr
+                    key={volunteer.id}
+                    className="hover:bg-slate-50 transition-colors"
+                  >
+                    <td className="p-4 font-medium text-gray-900">
+                      {volunteer.name}
+                    </td>
+
+                    <td className="p-4 text-gray-600">
+                      {volunteer.email}
+                    </td>
+
+                    <td className="p-4 text-gray-600">
+                      {volunteer.phone || "—"}
+                    </td>
+
+                    <td className="p-4 text-gray-600">
+                      {volunteer.city}
+                    </td>
+
+                    <td className="p-4 text-gray-600">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-100">
+                        {volunteer.interest}
+                      </span>
+                    </td>
+
+                    <td className="p-4 text-gray-500">
+                      {new Date(volunteer.createdAt).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
