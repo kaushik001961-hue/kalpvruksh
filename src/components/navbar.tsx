@@ -3,56 +3,64 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-
-
 export default function Navbar() {
   const pathname = usePathname();
 
-  const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Activities", href: "/activities" },
-    { name: "Projects", href: "/projects" },
-    { name: "News", href: "/news" },
-    { name: "Gallery", href: "/gallery" },
-    { name: "Contact", href: "/contact" },
-    { name: "Donate", href: "/donate" },
-    { name: "Volunteer", href: "/volunteer" },
-  ];
+const navLinks = [
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Projects", href: "/projects" },
+  { name: "Activities", href: "/activities" },
+  { name: "Volunteer", href: "/volunteer/dashboard" },
+  { name: "News", href: "/news" },
+  { name: "Contact", href: "/contact" },
+];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#edf3ed] shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+    <nav className="flex items-center justify-between px-6 py-4">
+      <div className="font-bold text-xl">
+        Kalpvruksh Trust
+      </div>
+
+      <div className="flex gap-6">
+        {navLinks.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className={
+              pathname === link.href
+                ? "text-green-600 font-semibold"
+                : ""
+            }
+          >
+            {link.name}
+          </Link>
+        ))}
+      </div>
+
+      <div className="flex gap-3">
         <Link
-          href="/"
-          className="text-3xl font-bold text-green-700"
+          href="/login"
+          className="px-4 py-2 border rounded-lg"
         >
-          🌿 Kalpvruksh
+          Login
         </Link>
 
-       <nav className="hidden md:flex gap-8">
-  {navLinks.map((link) => (
-    <Link
-      key={link.href}
-      href={link.href}
-      className={`font-medium transition ${
-        pathname === link.href
-          ? "text-green-700"
-          : "text-gray-700 hover:text-green-700"
-      }`}
-    >
-      {link.name}
-    </Link>
-  ))}
-</nav>
 
-<Link
-  href="/donate"
-  className="bg-green-700 hover:bg-green-800 text-white px-8 py-3 rounded-full"
+        <Link
+          href="/register"
+          className="px-4 py-2 bg-green-600 text-white rounded-lg"
+        >
+          Register
+        </Link>
+
+        <Link
+  href="/volunteer/dashboard"
+  className="px-4 py-2 border rounded-lg"
 >
-  Donate Now
+  Dashboard
 </Link>
       </div>
-    </header>
+    </nav>
   );
 }

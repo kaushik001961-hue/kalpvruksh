@@ -298,9 +298,6 @@ const trustees = [
               Become a Volunteer
             </button>
 
-            <button className="border border-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-green-900 transition">
-              Donate Now
-            </button>
           </div>
         </div>
       </section>

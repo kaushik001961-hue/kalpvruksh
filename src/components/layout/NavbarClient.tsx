@@ -5,6 +5,12 @@ import { Menu } from "lucide-react";
 import { useState } from "react";
 import { logout } from "@/actions/auth";
 
+"use client";
+
+import Link from "next/link";
+import { Menu } from "lucide-react";
+import { useState } from "react";
+
 const links = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
@@ -16,6 +22,17 @@ const links = [
   { name: "Volunteer", href: "/volunteer" },
 ];
 
+export default function NavbarClient({
+  isLoggedIn,
+}: {
+  isLoggedIn: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    // your navbar JSX
+  );
+}
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
@@ -42,28 +59,39 @@ export default function Navbar() {
           </nav>
 
           {/* Right Side Buttons */}
-          <div className="hidden lg:flex items-center gap-3">
-    <Link
-  href="/login"
-  className="px-4 py-2 border border-green-700 text-green-700 rounded-full"
->
-  Login
-</Link>
+         <div className="hidden lg:flex items-center gap-3">
+  {!isLoggedIn ? (
+    <>
+      <Link
+        href="/login"
+        className="px-4 py-2 border border-green-700 text-green-700 rounded-full"
+      >
+        Login
+      </Link>
 
-<Link
-  href="/register"
-  className="px-4 py-2 bg-blue-600 text-white rounded-full"
->
-  Register
-</Link>
-            
-            <Link
-              href="/donate"
-              className="bg-green-700 hover:bg-green-800 text-white px-6 py-2 rounded-full"
-            >
-              Donate Now
-            </Link>
-          </div>
+      <Link
+        href="/register"
+        className="px-4 py-2 bg-blue-600 text-white rounded-full"
+      >
+        Register
+      </Link>
+
+      <Link
+        href="/donate"
+        className="bg-green-700 text-white px-6 py-2 rounded-full"
+      >
+        Donate Now
+      </Link>
+    </>
+  ) : (
+    <Link
+      href="/volunteer/dashboard"
+      className="bg-green-700 text-white px-6 py-2 rounded-full"
+    >
+      Dashboard
+    </Link>
+  )}
+</div>
 
           {/* Mobile Menu Button */}
           <button

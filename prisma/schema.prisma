@@ -7,12 +7,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  VOLUNTEER
+}
+
+enum ProjectStatus {
+  PLANNED
+  ONGOING
+  COMPLETED
+}
+
+enum DonationStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
 model User {
   id        String   @id @default(cuid())
   name      String
   email     String   @unique
   password  String
-  role      String   @default("ADMIN")
+  role      Role     @default(VOLUNTEER)
+  createdAt DateTime @default(now())
+}
+
+model Volunteer {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  phone     String
+  city      String
+  interest  String
+  message   String?
   createdAt DateTime @default(now())
 }
 
@@ -27,13 +56,13 @@ model News {
 }
 
 model Project {
-  id          String   @id @default(cuid())
+  id          String        @id @default(cuid())
   title       String
   image       String?
   description String
-  status      String
+  status      ProjectStatus @default(PLANNED)
   location    String?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime      @default(now())
 }
 
 model Gallery {
@@ -43,23 +72,41 @@ model Gallery {
   createdAt DateTime @default(now())
 }
 
-model Donation {
+model Activity {
+  id          String   @id @default(cuid())
+  title       String
+  image       String?
+  description String
+  date        DateTime
+  createdAt   DateTime @default(now())
+}
+
+model ContactMessage {
   id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model SiteSettings {
+  id           String  @id @default(cuid())
+  organization String
+  email        String
+  phone        String
+  address      String
+  facebook     String?
+  instagram    String?
+  youtube      String?
+}
+
+model Donation {
+  id        String         @id @default(cuid())
   name      String
   email     String?
   phone     String?
   amount    Float
-  status    String   @default("Pending")
-  createdAt DateTime @default(now())
-}
-
-model Volunteer {
-  id        String   @id @default(cuid())
-  name      String
-  email     String
-  phone     String
-  city      String
-  interest  String
-  message   String?
-  createdAt DateTime @default(now())
+  status    DonationStatus @default(PENDING)
+  createdAt DateTime       @default(now())
 }
