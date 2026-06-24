@@ -8,9 +8,12 @@ datasource db {
 }
 
 enum Role {
-  SUPER_ADMIN
   ADMIN
+  REPORTER
+  EDITOR
+  USER
   VOLUNTEER
+  SUPER_ADMIN
 }
 
 enum ProjectStatus {
