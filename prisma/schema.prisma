@@ -41,14 +41,14 @@ model User {
 
 model Volunteer {
   id        String   @id @default(cuid())
-  // You can keep phone, city, and interest here as specialized volunteer fields
   phone     String?
   city      String
   interest  String
+  message   String?  // <-- Add this optional message column
   createdAt DateTime @default(now())
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @unique
 }
 
 model News {

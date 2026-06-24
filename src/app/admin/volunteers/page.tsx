@@ -18,15 +18,19 @@ export default async function VolunteersPage({
       ? {
           OR: [
             {
-              name: {
-                contains: search,
-                mode: "insensitive" as const,
+              user: {
+                name: {
+                  contains: search,
+                  mode: "insensitive" as const,
+                },
               },
             },
             {
-              email: {
-                contains: search,
-                mode: "insensitive" as const,
+              user: {
+                email: {
+                  contains: search,
+                  mode: "insensitive" as const,
+                },
               },
             },
             {
@@ -44,6 +48,9 @@ export default async function VolunteersPage({
           ],
         }
       : undefined,
+    include: {
+      user: true, // Crucial: Fetches the linked user's name and email
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -112,11 +119,11 @@ export default async function VolunteersPage({
                     className="hover:bg-slate-50 transition-colors"
                   >
                     <td className="p-4 font-medium text-gray-900">
-                      {volunteer.name}
+                      {volunteer.user?.name || "—"}
                     </td>
 
                     <td className="p-4 text-gray-600">
-                      {volunteer.email}
+                      {volunteer.user?.email || "—"}
                     </td>
 
                     <td className="p-4 text-gray-600">

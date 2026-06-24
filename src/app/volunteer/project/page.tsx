@@ -14,6 +14,15 @@ export default async function ProfilePage() {
     userId: string;
   };
 
+  const userWithProfile = await prisma.user.findUnique({
+  where: {
+    id: payload.userId,
+  },
+  include: {
+    volunteer: true, // This matches the lower-case property name on your User model!
+  },
+});
+
   const user = await prisma.user.findUnique({
     where: {
       id: payload.userId,
