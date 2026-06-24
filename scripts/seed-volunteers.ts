@@ -14,6 +14,22 @@ async function main() {
         password,
         role: Role.VOLUNTEER,
       },
+
+      const volunteers = [
+  {
+    name: "Volunteer Name",
+    email: "volunteer1@example.com",
+    password,
+    role: "VOLUNTEER", // <--- Use a plain string here instead of Role.VOLUNTEER
+  },
+  
+  {
+    name: "Ravi Volunteer",
+    email: "ravi@example.com",
+    password,
+    role: "VOLUNTEER", // <--- Update here as well
+  },
+
       {
         name: "Ravi Volunteer",
         email: "volunteer2@example.com",
