@@ -4,54 +4,45 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
+  // Generate a secure hashed password for your seed users
   const password = await bcrypt.hash("password123", 10);
 
-  await prisma.user.createMany({
-    data: [
-      {
-        name: "Jatin Volunteer",
-        email: "volunteer1@example.com",
-        password,
-        role: Role.VOLUNTEER,
-      },
+  console.log("⏳ Seeding volunteer accounts into the database...");
 
-      const volunteers = [
-  {
-    name: "Volunteer Name",
-    email: "volunteer1@example.com",
-    password,
-    role: "VOLUNTEER", // <--- Use a plain string here instead of Role.VOLUNTEER
-  },
-  
-  {
-    name: "Ravi Volunteer",
-    email: "ravi@example.com",
-    password,
-    role: "VOLUNTEER", // <--- Update here as well
-  },
+  const volunteers = [
+    {
+      name: "Volunteer One",
+      email: "volunteer1@example.com",
+      password,
+      role: "VOLUNTEER" as const, // Using a string literal matching your Prisma enum definition
+    },
+    {
+      name: "Ravi Volunteer",
+      email: "ravi@example.com",
+      password,
+      role: "VOLUNTEER" as const,
+    },
+  ];
 
-      {
-        name: "Ravi Volunteer",
-        email: "volunteer2@example.com",
-        password,
-        role: Role.VOLUNTEER,
+  for (const volunteer of volunteers) {
+    await prisma.user.upsert({
+      where: { email: volunteer.email },
+      update: {},
+      create: {
+        name: volunteer.name,
+        email: volunteer.email,
+        password: volunteer.password,
+        role: volunteer.role,
       },
-      {
-        name: "Priya Volunteer",
-        email: "volunteer3@example.com",
-        password,
-        role: Role.VOLUNTEER,
-      },
-    ],
-    skipDuplicates: true,
-  });
+    });
+  }
 
-  console.log("✅ Volunteers seeded successfully");
+  console.log("✅ Volunteer accounts seeded successfully!");
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error("❌ Error seeding data:", e);
     process.exit(1);
   })
   .finally(async () => {
