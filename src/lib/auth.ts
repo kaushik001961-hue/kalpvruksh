@@ -11,11 +11,19 @@ export function createToken(userId: string) {
   );
 }
 
-export function verifyToken(token: string) {
+export function verifyToken(
+  token: string
+): string | null {
   try {
-    return jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(
+      token,
+      JWT_SECRET
+    ) as {
+      userId: string;
+    };
+
+    return decoded.userId;
   } catch {
     return null;
   }
 }
-

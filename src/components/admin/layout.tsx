@@ -9,7 +9,7 @@ export default function AdminLayout({
     <div className="flex">
       <AdminSidebar />
 
-      <main className="flex-1 p-8 bg-slate-50 min-h-screen">
+      <main className="flex-1">
         {children}
       </main>
     </div>

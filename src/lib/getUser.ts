@@ -3,19 +3,24 @@ import prisma from "@/lib/prisma";
 import { verifyToken } from "@/lib/auth";
 
 export async function getCurrentUser() {
-  const token = (await cookies()).get("token")?.value;
+  const cookieStore = await cookies();
 
-  if (!token) return null;
+  const token =
+    cookieStore.get("token")?.value;
 
-  const payload = verifyToken(token) as {
-    userId: string;
-  } | null;
+  if (!token) {
+    return null;
+  }
 
-  if (!payload) return null;
+  const userId = verifyToken(token);
 
-  return prisma.user.findUnique({
+  if (!userId) {
+    return null;
+  }
+
+  return await prisma.user.findUnique({
     where: {
-      id: payload.userId,
+      id: userId,
     },
   });
 }

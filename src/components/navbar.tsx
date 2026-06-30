@@ -1,20 +1,21 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { getCurrentUser } from "@/lib/getUser";
+import LogoutButton from "@/components/LogoutButton";
+import { logout } from "@/actions/auth";
 
-export default function Navbar() {
-  const pathname = usePathname();
 
-const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Projects", href: "/projects" },
-  { name: "Activities", href: "/activities" },
-  { name: "Volunteer", href: "/volunteer/dashboard" },
-  { name: "News", href: "/news" },
-  { name: "Contact", href: "/contact" },
-];
+export default async function Navbar() {
+  const user = await getCurrentUser();
+
+  console.log("========== NAVBAR ==========");
+  console.log(user);
+
+  return (
+     );
+}
+
+export default async function Navbar() {
+  const user = await getCurrentUser();
 
   return (
     <nav className="flex items-center justify-between px-6 py-4">
@@ -23,44 +24,56 @@ const navLinks = [
       </div>
 
       <div className="flex gap-6">
-        {navLinks.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={
-              pathname === link.href
-                ? "text-green-600 font-semibold"
-                : ""
-            }
-          >
-            {link.name}
-          </Link>
-        ))}
+        <Link href="/">Home</Link>
+        <Link href="/about">About</Link>
+        <Link href="/projects">Projects</Link>
+        <Link href="/activities">Activities</Link>
+        <Link href="/news">News</Link>
+        <Link href="/contact">Contact</Link>
       </div>
 
       <div className="flex gap-3">
-        <Link
-          href="/login"
-          className="px-4 py-2 border rounded-lg"
+  {user ? (
+    <>
+      <Link
+        href={
+          user.role === "ADMIN" ||
+          user.role === "SUPER_ADMIN"
+            ? "/admin"
+            : "/volunteer/dashboard"
+        }
+        className="px-4 py-2 border rounded-lg"
+      >
+        Dashboard
+      </Link>
+
+      <form action={logout}>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-red-600 text-white rounded-lg"
         >
-          Login
-        </Link>
+          Logout
+        </button>
+      </form>
+    </>
+  ) : (
+    <>
+      <Link
+        href="/login"
+        className="px-4 py-2 border rounded-lg"
+      >
+        Login
+      </Link>
 
-
-        <Link
-          href="/register"
-          className="px-4 py-2 bg-green-600 text-white rounded-lg"
-        >
-          Register
-        </Link>
-
-        <Link
-  href="/volunteer/dashboard"
-  className="px-4 py-2 border rounded-lg"
->
-  Dashboard
-</Link>
-      </div>
+      <Link
+        href="/register"
+        className="px-4 py-2 bg-green-600 text-white rounded-lg"
+      >
+        Register
+      </Link>
+    </>
+  )}
+</div>
     </nav>
   );
 }
