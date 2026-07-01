@@ -1,4 +1,4 @@
-import Navbar from "@/components/layout/Navbar";
+
 import Hero from "@/components/home/Hero";
 import About from "@/components/home/About";
 import MissionVision from "@/components/home/Mission";
@@ -15,8 +15,7 @@ import DonateCTA from "@/components/home/DonateCTA";
 export default function Home() {
   return (
     <>
-       <Navbar />
-
+   
       <Hero />
 
       <About />
@@ -38,7 +37,6 @@ export default function Home() {
       <DonateCTA />
 
   
-      <Footer />
     </>
   );
 }

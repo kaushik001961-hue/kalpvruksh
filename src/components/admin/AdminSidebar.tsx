@@ -20,12 +20,12 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 min-h-screen bg-slate-900 text-white p-6 flex flex-col">
-      <h2 className="text-3xl font-bold mb-8">
+    <aside className="w-64 min-h-screen bg-slate-900 text-white p-5">
+      <h2 className="text-2xl font-bold mb-8 text-green-400">
         Admin Panel
       </h2>
 
-      <nav className="flex-1 flex flex-col gap-2">
+      <nav className="flex flex-col gap-2">
         {menu.map((item) => {
           const active = pathname === item.href;
 
@@ -43,11 +43,12 @@ export default function AdminSidebar() {
             </Link>
           );
         })}
-      </nav>
 
-      <div className="mt-6 border-t border-slate-700 pt-6">
-        <LogoutButton />
-      </div>
+        {/* Logout directly below Settings */}
+        <div className="border-t border-slate-700 mt-4 pt-4">
+          <LogoutButton />
+        </div>
+      </nav>
     </aside>
   );
 }

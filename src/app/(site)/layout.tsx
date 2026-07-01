@@ -8,10 +8,9 @@ export default function SiteLayout({
 }) {
   return (
     <>
-   
-      <main className="min-h-screen">
-        {children}
-      </main>
+      <Navbar />
+
+      <main>{children}</main>
 
       <Footer />
     </>
