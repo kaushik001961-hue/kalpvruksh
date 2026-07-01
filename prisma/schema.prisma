@@ -39,16 +39,62 @@ model User {
   volunteer Volunteer?
 }
 
-model Volunteer {
-  id        String   @id @default(cuid())
-  phone     String?
-  city      String
-  interest  String
-  message   String?  // <-- Add this optional message column
-  createdAt DateTime @default(now())
+enum VolunteerStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ACTIVE
+  INACTIVE
+}
 
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @unique
+model Volunteer {
+  id String @id @default(cuid())
+
+  // Personal Information
+  firstName String
+  lastName  String
+
+  email String @unique
+  phone String
+
+  gender String?
+  dob    DateTime?
+
+  // Address
+  address String?
+  city    String
+  state   String?
+  country String  @default("India")
+  pincode String?
+
+  // Professional Information
+  occupation   String?
+  organization String?
+  education    String?
+
+  // Volunteer Information
+  interest     String
+  skills       String?
+  languages    String?
+  availability String?
+
+  // Emergency Contact
+  emergencyName  String?
+  emergencyPhone String?
+
+  // Additional Information
+  message String?
+
+  // Admin
+  status VolunteerStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id])
+  photo String?
+  resume String?
 }
 
 model News {

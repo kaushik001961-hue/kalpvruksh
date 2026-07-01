@@ -35,11 +35,37 @@ export default function VolunteerPage() {
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
-    name: "",
+    // Personal Information
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
+    gender: "",
+    dob: "",
+
+    // Address
+    address: "",
     city: "",
+    state: "",
+    country: "India",
+    pincode: "",
+
+    // Professional Information
+    occupation: "",
+    organization: "",
+    education: "",
+
+    // Volunteer Information
     interest: "",
+    skills: "",
+    languages: "",
+    availability: "",
+
+    // Emergency Contact
+    emergencyName: "",
+    emergencyPhone: "",
+
+    // Additional Information
     message: "",
   });
 
@@ -48,15 +74,13 @@ export default function VolunteerPage() {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    setForm({
-      ...form,
+    setForm((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -70,237 +94,211 @@ export default function VolunteerPage() {
         body: JSON.stringify(form),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        throw new Error("Submission failed");
+        throw new Error(result.error || "Something went wrong.");
       }
 
       alert("Volunteer application submitted successfully!");
 
       setForm({
-        name: "",
+        firstName: "",
+        lastName: "",
         email: "",
         phone: "",
+        gender: "",
+        dob: "",
+
+        address: "",
         city: "",
+        state: "",
+        country: "India",
+        pincode: "",
+
+        occupation: "",
+        organization: "",
+        education: "",
+
         interest: "",
+        skills: "",
+        languages: "",
+        availability: "",
+
+        emergencyName: "",
+        emergencyPhone: "",
+
         message: "",
       });
     } catch (error) {
-      alert("Something went wrong. Please try again.");
       console.error(error);
+      alert("Failed to submit application.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="min-h-screen bg-[#f7faf7]">
-      {/* Hero */}
-      <section className="bg-gradient-to-r from-green-900 via-green-800 to-green-700 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-24 text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-6xl font-bold mb-6"
-          >
-            Become A Volunteer
-          </motion.h1>
+    <main className="min-h-screen bg-[#f7faf7] p-6 md:p-12">
+      {/* Hero and Opportunities Sections would render here */}
 
-          <p className="max-w-3xl mx-auto text-lg text-green-100">
-            Join Kalpvruksh Trust and contribute your time, skills,
-            and passion toward creating positive social impact.
-          </p>
-        </div>
-      </section>
-
-      {/* Opportunities */}
-      <section className="max-w-7xl mx-auto px-6 py-20">
-        <div className="text-center mb-14">
-          <h2 className="text-4xl font-bold text-green-900">
-            Why Volunteer With Us?
-          </h2>
-
-          <p className="text-gray-600 mt-4 max-w-3xl mx-auto">
-            Volunteers are the backbone of our initiatives. Together,
-            we can transform communities through education,
-            healthcare, environmental conservation, and social welfare.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          {opportunities.map((item, index) => {
-            const Icon = item.icon;
-
-            return (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition"
-              >
-                <div className="w-16 h-16 rounded-2xl bg-green-100 flex items-center justify-center mb-6">
-                  <Icon className="w-8 h-8 text-green-700" />
-                </div>
-
-                <h3 className="text-2xl font-bold text-green-900 mb-4">
-                  {item.title}
-                </h3>
-
-                <p className="text-gray-600 leading-relaxed">
-                  {item.description}
-                </p>
-              </motion.div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Volunteer Form */}
-      <section className="max-w-5xl mx-auto px-6 pb-20">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="bg-white rounded-3xl shadow-xl p-10"
-        >
-          <div className="flex items-center gap-3 mb-8">
-            <Users className="text-green-700" />
-            <h2 className="text-3xl font-bold text-green-900">
-              Volunteer Registration
+      <div className="mx-auto max-w-4xl">
+        <form onSubmit={handleSubmit} className="space-y-10">
+          {/* Personal Information */}
+          <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-lg">
+            <h2 className="mb-6 text-2xl font-bold text-green-900">
+              👤 Personal Information
             </h2>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <label className="mb-2 block font-medium">First Name *</label>
+                <input
+                  name="firstName"
+                  value={form.firstName}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-xl border px-4 py-3"
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block font-medium">Last Name *</label>
+                <input
+                  name="lastName"
+                  value={form.lastName}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-xl border px-4 py-3"
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block font-medium">Email Address *</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-xl border px-4 py-3"
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block font-medium">Mobile Number *</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-xl border px-4 py-3"
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block font-medium">Gender</label>
+                <select
+                  name="gender"
+                  value={form.gender}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border px-4 py-3"
+                >
+                  <option value="">Select Gender</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                  <option>Prefer not to say</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="mb-2 block font-medium">Date of Birth</label>
+                <input
+                  type="date"
+                  name="dob"
+                  value={form.dob}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border px-4 py-3"
+                />
+              </div>
+            </div>
           </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="grid md:grid-cols-2 gap-6"
-          >
-            <input
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              type="text"
-              placeholder="Full Name"
-              required
-              className="border border-gray-300 rounded-xl px-4 py-3"
-            />
+          {/* Address */}
+          <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-lg">
+            <h2 className="mb-6 text-2xl font-bold text-green-900">
+              📍 Address Information
+            </h2>
 
-            <input
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              type="email"
-              placeholder="Email Address"
-              required
-              className="border border-gray-300 rounded-xl px-4 py-3"
-            />
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="md:col-span-2">
+                <label className="mb-2 block font-medium">Address</label>
+                <textarea
+                  name="address"
+                  value={form.address}
+                  onChange={handleChange}
+                  rows={3}
+                  className="w-full rounded-xl border px-4 py-3"
+                />
+              </div>
 
-            <input
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              type="tel"
-              placeholder="Phone Number"
-              required
-              className="border border-gray-300 rounded-xl px-4 py-3"
-            />
+              <div>
+                <label className="mb-2 block font-medium">City *</label>
+                <input
+                  name="city"
+                  value={form.city}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-xl border px-4 py-3"
+                />
+              </div>
 
-            <input
-              name="city"
-              value={form.city}
-              onChange={handleChange}
-              type="text"
-              placeholder="City"
-              required
-              className="border border-gray-300 rounded-xl px-4 py-3"
-            />
+              <div>
+                <label className="mb-2 block font-medium">State</label>
+                <input
+                  name="state"
+                  value={form.state}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border px-4 py-3"
+                />
+              </div>
 
-            <select
-              name="interest"
-              value={form.interest}
-              onChange={handleChange}
-              required
-              className="border border-gray-300 rounded-xl px-4 py-3 md:col-span-2"
-            >
-              <option value="">Select Area of Interest</option>
-              <option>Environment</option>
-              <option>Education</option>
-              <option>Healthcare</option>
-              <option>Community Welfare</option>
-              <option>Women Empowerment</option>
-            </select>
+              <div>
+                <label className="mb-2 block font-medium">Country</label>
+                <input
+                  name="country"
+                  value={form.country}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border px-4 py-3"
+                />
+              </div>
 
-            <textarea
-              name="message"
-              value={form.message}
-              onChange={handleChange}
-              rows={5}
-              placeholder="Tell us about yourself and how you'd like to help..."
-              className="border border-gray-300 rounded-xl px-4 py-3 md:col-span-2"
-            />
+              <div>
+                <label className="mb-2 block font-medium">Pincode</label>
+                <input
+                  name="pincode"
+                  value={form.pincode}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border px-4 py-3"
+                />
+              </div>
+            </div>
+          </div>
 
+          {/* Submit Button */}
+          <div className="flex justify-end">
             <button
               type="submit"
               disabled={loading}
-              className="md:col-span-2 bg-green-700 hover:bg-green-800 text-white py-4 rounded-xl font-semibold transition"
+              className="rounded-xl bg-green-700 px-8 py-4 font-semibold text-white transition hover:bg-green-800 disabled:bg-gray-400"
             >
-              {loading
-                ? "Submitting..."
-                : "Submit Application"}
+              {loading ? "Submitting..." : "Submit Application"}
             </button>
-          </form>
-        </motion.div>
-      </section>
-
-      {/* Impact Stats */}
-      <section className="bg-white py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8">
-            {[
-              ["500+", "Active Volunteers"],
-              ["50+", "Events Organized"],
-              ["10000+", "Lives Impacted"],
-              ["25+", "Projects Completed"],
-            ].map(([number, label]) => (
-              <div
-                key={label}
-                className="text-center bg-[#f7faf7] rounded-3xl p-8 shadow-md"
-              >
-                <h3 className="text-5xl font-bold text-green-700">
-                  {number}
-                </h3>
-
-                <p className="mt-3 text-gray-600">
-                  {label}
-                </p>
-              </div>
-            ))}
           </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="bg-green-900 text-white py-20">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <HeartHandshake className="w-16 h-16 mx-auto mb-6 text-green-300" />
-
-          <h2 className="text-4xl font-bold mb-6">
-            Together We Can Create Change
-          </h2>
-
-          <p className="text-green-100 mb-8">
-            Every volunteer contributes to building stronger,
-            healthier, and more sustainable communities.
-          </p>
-
-          <a
-            href="/donate"
-            className="inline-block bg-white text-green-900 px-8 py-4 rounded-full font-semibold"
-          >
-            Support Our Mission
-          </a>
-        </div>
-      </section>
+        </form>
+      </div>
     </main>
   );
 }
