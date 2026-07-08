@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-// Assumed imports based on your build trace payload settings
 interface ActivityFormProps {
   initialData?: {
     id?: string;
@@ -28,7 +27,6 @@ export default function ActivityForm({ initialData, createActivity, updateActivi
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  // Form State Values
   const [values, setValues] = useState({
     title: initialData?.title || "",
     slug: initialData?.slug || "",
@@ -58,7 +56,6 @@ export default function ActivityForm({ initialData, createActivity, updateActivi
     setLoading(true);
 
     try {
-      {/* 🚀 FIXED: Transform form attributes to match backend types perfectly before function invocation */}
       const formattedValues = {
         title: values.title,
         description: values.content || values.excerpt || "", 
@@ -75,7 +72,7 @@ export default function ActivityForm({ initialData, createActivity, updateActivi
       router.push("/admin/activities");
       router.refresh();
     } catch (error) {
-      console.error("An error occurred while saving activity structural form payload:", error);
+      console.error("An error occurred while saving activity data:", error);
     } finally {
       setLoading(false);
     }
@@ -155,4 +152,29 @@ export default function ActivityForm({ initialData, createActivity, updateActivi
             name="featured"
             checked={values.featured}
             onChange={handleChange}
-            className="w-4 h-4
+            {/* 🚀 FIXED: String correctly terminated below */}
+            className="w-4 h-4 accent-emerald-600"
+          />
+          Feature on Homepage
+        </label>
+      </div>
+
+      <div className="flex justify-end gap-3 pt-4 border-t border-neutral-100">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-50 rounded-lg transition"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          disabled={loading}
+          className="px-5 py-2 text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm transition disabled:opacity-50"
+        >
+          {loading ? "Saving Records..." : "Save Activity Data"}
+        </button>
+      </div>
+    </form>
+  );
+}
