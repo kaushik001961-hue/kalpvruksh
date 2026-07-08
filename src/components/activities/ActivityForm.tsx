@@ -152,7 +152,6 @@ export default function ActivityForm({ initialData, createActivity, updateActivi
             name="featured"
             checked={values.featured}
             onChange={handleChange}
-            {/* 🚀 FIXED: String correctly terminated below */}
             className="w-4 h-4 accent-emerald-600"
           />
           Feature on Homepage
