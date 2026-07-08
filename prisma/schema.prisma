@@ -16,100 +16,105 @@ model User {
   createdAt DateTime   @default(now())
   volunteer Volunteer?
 }
+
 model Volunteer {
-  id                  String   @id @default(cuid())
+  id String @id @default(cuid())
 
   // User Account
-  userId              String?  @unique
-  user                User?    @relation(fields: [userId], references: [id])
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id])
 
   // Personal Information
-  firstName           String
-  middleName          String?
-  lastName            String
-  gender              String?
-  dob                 DateTime?
-  bloodGroup          String?
-  maritalStatus       String?
-  nationality         String   @default("Indian")
+  firstName     String
+  middleName    String?
+  lastName      String
+  gender        String?
+  dob           DateTime?
+  bloodGroup    String?
+  maritalStatus String?
+  nationality   String    @default("Indian")
 
   // Contact
-  phone               String
-  alternatePhone      String?
-  whatsappNumber      String?
-  email               String   @unique
+  phone          String
+  alternatePhone String?
+  whatsappNumber String?
+  email          String  @unique
 
   // Address
-  address             String?
-  city                String
-  district            String?
-  state               String?
-  country             String   @default("India")
-  pincode             String?
+  address  String?
+  city     String
+  district String?
+  state    String?
+  country  String  @default("India")
+  pincode  String?
 
   // Identity
-  aadhaarNumber       String?
-  panNumber           String?
-  voterId             String?
-  drivingLicense      String?
-  passportNumber      String?
+  aadhaarNumber  String?
+  panNumber      String?
+  voterId        String?
+  drivingLicense String?
+  passportNumber String?
 
   // Education
-  education           String?
-  college             String?
-  course              String?
-  passingYear         Int?
+  education   String?
+  college     String?
+  course      String?
+  passingYear Int?
 
   // Employment
-  occupation          String?
-  organization        String?
-  designation         String?
-  experienceYears     Int?
+  occupation      String?
+  organization    String?
+  designation     String?
+  experienceYears Int?
 
   // Volunteer Information
-  interest            String
-  skills              String?
-  languages           String?
-  availability        String?
-  preferredLocation   String?
-  previousExperience  String?
-  message             String?
+  interest           String
+  skills             String?
+  languages          String?
+  availability       String?
+  preferredLocation  String?
+  previousExperience String?
+  message            String?
 
   // Emergency Contact
-  emergencyName       String?
-  emergencyRelation   String?
-  emergencyPhone      String?
+  emergencyName     String?
+  emergencyRelation String?
+  emergencyPhone    String?
 
   // Medical
-  allergies           String?
-  medicalConditions   String?
-  medications         String?
+  allergies         String?
+  medicalConditions String?
+  medications       String?
 
   // Documents
-  photo               String?
-  resume              String?
-  aadhaarFile         String?
-  panFile             String?
-  policeVerification  String?
+  photo              String?
+  resume             String?
+  aadhaarFile        String?
+  panFile            String?
+  policeVerification String?
 
   // Social
-  facebook            String?
-  instagram           String?
-  linkedin            String?
+  facebook  String?
+  instagram String?
+  linkedin  String?
 
   // Office Use
-  volunteerCode       String?  @unique
-  idCardNumber        String?
-  joinedDate          DateTime?
-  approvedAt          DateTime?
-  approvedBy          String?
-  remarks             String?
+  volunteerCode String?   @unique
+  idCardNumber  String?
+  joinedDate    DateTime?
+  approvedAt    DateTime?
+  approvedBy    String?
+  remarks       String?
 
   // Status
-  status              VolunteerStatus @default(PENDING)
+  status VolunteerStatus @default(PENDING)
 
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  activities         VolunteerActivity[]
+  attendances        VolunteerAttendance[]
+  volunteerSkills    VolunteerSkill[]
+  volunteerDocuments VolunteerDocument[]
 }
 
 model News {
@@ -197,7 +202,7 @@ model VolunteerDocument {
 }
 
 model VolunteerActivity {
-  id           String @id @default(cuid())
+  id           String   @id @default(cuid())
   volunteerId  String
   activityName String
   activityDate DateTime
@@ -208,11 +213,11 @@ model VolunteerActivity {
 }
 
 model VolunteerAttendance {
-  id           String @id @default(cuid())
-  volunteerId  String
-  checkIn      DateTime
-  checkOut     DateTime?
-  eventName    String?
+  id          String    @id @default(cuid())
+  volunteerId String
+  checkIn     DateTime
+  checkOut    DateTime?
+  eventName   String?
 
   volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
 }
