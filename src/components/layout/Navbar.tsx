@@ -18,8 +18,7 @@ export default function Navbar() {
   ];
 
   return (
-    // 🚀 FIXED & FLOATING: Pinned to the viewport with a substantial built-in ceiling gap
-    <div className="fixed top-0 inset-x-0 w-full pt-8 pb-4 z-50 pointer-events-none bg-gradient-to-b from-white via-white/80 to-transparent">
+    <div className="fixed top-0 left-0 right-0 w-full pt-8 pb-4 z-50 pointer-events-none bg-gradient-to-b from-white via-white/40 to-transparent">
       <header className="w-[92%] max-w-7xl mx-auto bg-white/95 backdrop-blur-md border border-neutral-200/80 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl pointer-events-auto">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-4 py-3 sm:py-4">
@@ -35,7 +34,7 @@ export default function Navbar() {
                 <span className="text-xl sm:text-2xl font-black text-neutral-900 tracking-tight leading-none">
                   Shree Kalpvruksh
                 </span>
-                <span className="text-sm sm:text-base text-neutral-500 tracking-normal mt-1.5 font-bold">
+                <span className="text-sm sm:text-base text-neutral-500 tracking-normal mt-1.5 font-normal">
                   Charitable Trust
                 </span>
               </div>
@@ -47,18 +46,18 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-[16px] font-bold text-neutral-700 hover:text-emerald-600 transition-colors tracking-wide"
+                  className="text-[16px] font-normal text-neutral-600 hover:text-emerald-600 transition-colors tracking-wide"
                 >
                   {link.name}
                 </Link>
               ))}
             </nav>
 
-            {/* 3. ACTION BUTTONS */}
+            {/* 3. ACTION BUTTONS AREA */}
             <div className="flex items-center gap-3 lg:gap-4 shrink-0">
               
               <Link
-                href="/login"
+                href="/admin"
                 className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-full transition-colors"
                 title="Login"
               >
@@ -66,20 +65,19 @@ export default function Navbar() {
               </Link>
 
               <Link
-                href="/volunteer/register"
-                className="hidden md:inline-flex items-center text-[15px] font-extrabold border-2 border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-5 py-2 rounded-full transition-all"
+                href="/volunteer"
+                className="hidden md:inline-flex items-center text-[15px] font-normal border border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-5 py-2 rounded-full transition-all"
               >
                 Become Volunteer
               </Link>
 
               <Link
                 href="/donate"
-                className="text-[15px] font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all active:scale-95"
+                className="text-[15px] font-normal bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all active:scale-95"
               >
                 Donate
               </Link>
 
-              {/* MOBILE DROPDOWN BURGER TOGGLE */}
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="p-2 text-neutral-600 hover:text-neutral-900 transition-colors lg:hidden focus:outline-none"
@@ -100,16 +98,16 @@ export default function Navbar() {
                 key={link.name}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="text-lg font-extrabold text-neutral-800 hover:text-emerald-600 border-b border-neutral-100 pb-2 transition"
+                className="text-lg font-normal text-neutral-700 hover:text-emerald-600 border-b border-neutral-100 pb-2 transition"
               >
                 {link.name}
               </Link>
             ))}
             
             <Link
-              href="/volunteer/register"
+              href="/volunteer"
               onClick={() => setIsOpen(false)}
-              className="mt-4 text-center text-base font-extrabold bg-neutral-100 text-neutral-800 py-3.5 rounded-full hover:bg-neutral-200 transition"
+              className="mt-4 text-center text-base font-normal bg-neutral-100 text-neutral-800 py-3.5 rounded-full hover:bg-neutral-200 transition"
             >
               Become Volunteer
             </Link>
