@@ -1,76 +1,67 @@
-import prisma from "@/lib/prisma";
-import { cookies } from "next/headers";
-import { verifyToken } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import prisma from "@/lib/prisma";
+import { verifyToken } from "@/lib/auth"; // Verify this matches your auth helper file path
+import { cookies } from "next/headers";
 
-export default async function ProfilePage() {
-  const token = (await cookies()).get("token")?.value;
+export default async function VolunteerProjectPage() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
 
   if (!token) {
     redirect("/login");
   }
 
-  const payload = verifyToken(token) as {
-    userId: string;
-  };
+  // 1. Force decode token into an explicitly named independent variable
+  const tokenData = verifyToken(token) as any;
 
+  // 2. Extract the ID using a defensive fallback string
+  const cleanUserId: string = 
+    tokenData && typeof tokenData === "object" && "userId" in tokenData
+      ? (tokenData.userId as string)
+      : "";
+
+  // 3. Clear out invalid or missing sessions immediately
+  if (!cleanUserId) {
+    redirect("/login");
+  }
+
+  // 4. Query Prisma using our verified clean string variable (completely safe from 'never')
   const userWithProfile = await prisma.user.findUnique({
-  where: {
-    id: payload.userId,
-  },
-  include: {
-    volunteer: true, // This matches the lower-case property name on your User model!
-  },
-});
-
-  const user = await prisma.user.findUnique({
     where: {
-      id: payload.userId,
+      id: cleanUserId,
     },
     include: {
-      volunteer: true,
+      volunteer: true, 
     },
   });
 
-  if (!user) {
+  if (!userWithProfile) {
     redirect("/login");
   }
 
   return (
-    <div className="bg-white rounded-xl shadow p-6">
-      <h1 className="text-3xl font-bold mb-6">
-        My Profile
-      </h1>
-
-      <div className="space-y-4">
-        <p>
-          <strong>Name:</strong> {user.name}
+    <main className="min-h-screen bg-[#f7faf7] p-6 md:p-12">
+      <div className="mx-auto max-w-4xl rounded-3xl border border-gray-200 bg-white p-8 shadow-lg">
+        <h1 className="text-3xl font-bold text-green-900 mb-4">
+          Volunteer Project Dashboard
+        </h1>
+        <p className="text-gray-600 mb-6">
+          Welcome back, {userWithProfile.name || "Volunteer"}! Here are your active community trust initiatives.
         </p>
-
-        <p>
-          <strong>Email:</strong> {user.email}
-        </p>
-
-        <p>
-          <strong>Phone:</strong>{" "}
-          {user.volunteer?.phone}
-        </p>
-
-        <p>
-          <strong>City:</strong>{" "}
-          {user.volunteer?.city}
-        </p>
-
-        <p>
-          <strong>Interest:</strong>{" "}
-          {user.volunteer?.interest}
-        </p>
-
-        <p>
-          <strong>Message:</strong>{" "}
-          {user.volunteer?.message}
-        </p>
+        
+        {userWithProfile.volunteer ? (
+          <div className="space-y-4">
+            <div className="p-4 bg-green-50 rounded-xl border border-green-200">
+              <span className="font-semibold text-green-800">Status:</span> Active Profile Verified
+            </div>
+            {/* Add your volunteer profile details layout grid here */}
+          </div>
+        ) : (
+          <div className="p-4 bg-yellow-50 rounded-xl border border-yellow-200 text-yellow-800">
+            You haven't completed your volunteer profile yet.
+          </div>
+        )}
       </div>
-    </div>
+    </main>
   );
 }

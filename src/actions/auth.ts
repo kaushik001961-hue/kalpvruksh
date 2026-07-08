@@ -51,9 +51,18 @@ export async function login(formData: FormData) {
     }
 
   } catch (error) {
-    console.error("Login unexpected error:", error);
-    return { error: "Something went wrong. Please try again." };
+  console.error("========== LOGIN ERROR ==========");
+  console.error(error);
+
+  if (error instanceof Error) {
+    console.error(error.message);
+    console.error(error.stack);
   }
+
+  return {
+    error: "Something went wrong. Please try again.",
+  };
+}
 
   // 2. Redirect MUST happen OUTSIDE the try/catch block
   if (targetUrl) {
