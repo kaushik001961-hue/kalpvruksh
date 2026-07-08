@@ -1,301 +1,158 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import slugify from "slugify";
 
-import {
-  ActivityFormValues,
-  activitySchema,
-} from "@/lib/validations/activity";
-
-import {
-  createActivity,
-  updateActivity,
-} from "@/actions/activityActions";
-
-interface Category {
-  id: string;
-  name: string;
-}
-
-interface Props {
-  categories: Category[];
-  initialData?: Partial<ActivityFormValues> & {
+// Assumed imports based on your build trace payload settings
+interface ActivityFormProps {
+  initialData?: {
     id?: string;
+    title?: string;
+    slug?: string;
+    content?: string;
+    categoryId?: string;
+    featured?: boolean;
+    published?: boolean;
+    excerpt?: string;
+    featuredImage?: string;
+    location?: string;
+    eventDate?: string;
+    metaTitle?: string;
+    metaDescription?: string;
   };
+  createActivity: (data: { title: string; description: string; image?: string | null; date: Date }) => Promise<any>;
+  updateActivity: (id: string, data: { title: string; description: string; image?: string | null; date: Date }) => Promise<any>;
 }
 
-export default function ActivityForm({
-  categories,
-  initialData,
-}: Props) {
+export default function ActivityForm({ initialData, createActivity, updateActivity }: ActivityFormProps) {
   const router = useRouter();
-
   const [loading, setLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm<ActivityFormValues>({
-    resolver: zodResolver(activitySchema),
-    defaultValues: {
-      title: initialData?.title || "",
-      slug: initialData?.slug || "",
-      excerpt: initialData?.excerpt || "",
-      content: initialData?.content || "",
-      featuredImage: initialData?.featuredImage || "",
-      categoryId: initialData?.categoryId || "",
-      location: initialData?.location || "",
-      eventDate: initialData?.eventDate || "",
-      featured: initialData?.featured || false,
-      published: initialData?.published || false,
-      metaTitle: initialData?.metaTitle || "",
-      metaDescription: initialData?.metaDescription || "",
-    },
+  // Form State Values
+  const [values, setValues] = useState({
+    title: initialData?.title || "",
+    slug: initialData?.slug || "",
+    content: initialData?.content || "",
+    categoryId: initialData?.categoryId || "",
+    featured: initialData?.featured || false,
+    published: initialData?.published || false,
+    excerpt: initialData?.excerpt || "",
+    featuredImage: initialData?.featuredImage || "",
+    location: initialData?.location || "",
+    eventDate: initialData?.eventDate || "",
+    metaTitle: initialData?.metaTitle || "",
+    metaDescription: initialData?.metaDescription || "",
   });
 
-  const title = watch("title");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    setValues((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
-  function generateSlug() {
-    setValue(
-      "slug",
-      slugify(title || "", {
-        lower: true,
-        strict: true,
-      })
-    );
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
 
-  async function onSubmit(values: ActivityFormValues) {
     try {
-      setLoading(true);
+      {/* 🚀 FIXED: Transform form attributes to match backend types perfectly before function invocation */}
+      const formattedValues = {
+        title: values.title,
+        description: values.content || values.excerpt || "", 
+        image: values.featuredImage || null,                 
+        date: values.eventDate ? new Date(values.eventDate) : new Date(), 
+      };
 
       if (initialData?.id) {
-        await updateActivity(initialData.id, values);
+        await updateActivity(initialData.id, formattedValues);
       } else {
-        await createActivity(values);
+        await createActivity(formattedValues);
       }
 
       router.push("/admin/activities");
       router.refresh();
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong.");
+    } catch (error) {
+      console.error("An error occurred while saving activity structural form payload:", error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6"
-    >
-      {/* Title */}
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl bg-white p-6 rounded-xl border border-neutral-200 shadow-sm">
+      <h2 className="text-xl font-bold text-neutral-800">
+        {initialData?.id ? "Edit Activity Profile Layout" : "Create New Foundation Activity"}
+      </h2>
 
-      <div>
-        <label className="font-medium">
-          Activity Title
-        </label>
-
-        <input
-          {...register("title")}
-          className="mt-2 w-full rounded-lg border p-3"
-        />
-
-        <p className="text-red-500 text-sm">
-          {errors.title?.message}
-        </p>
-      </div>
-
-      {/* Slug */}
-
-      <div>
-        <label className="font-medium">
-          Slug
-        </label>
-
-        <div className="mt-2 flex gap-2">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-medium text-neutral-700">Activity Title</label>
           <input
-            {...register("slug")}
-            className="flex-1 rounded-lg border p-3"
+            type="text"
+            name="title"
+            value={values.title}
+            onChange={handleChange}
+            required
+            className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-emerald-600"
           />
+        </div>
 
-          <button
-            type="button"
-            onClick={generateSlug}
-            className="rounded-lg bg-gray-800 px-4 text-white"
-          >
-            Generate
-          </button>
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm font-medium text-neutral-700">Event Date</label>
+          <input
+            type="date"
+            name="eventDate"
+            value={values.eventDate}
+            onChange={handleChange}
+            className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-emerald-600"
+          />
         </div>
       </div>
 
-      {/* Category */}
-
-      <div>
-        <label className="font-medium">
-          Category
-        </label>
-
-        <select
-          {...register("categoryId")}
-          className="mt-2 w-full rounded-lg border p-3"
-        >
-          <option value="">
-            Select Category
-          </option>
-
-          {categories.map((category) => (
-            <option
-              key={category.id}
-              value={category.id}
-            >
-              {category.name}
-            </option>
-          ))}
-        </select>
-
-        <p className="text-red-500 text-sm">
-          {errors.categoryId?.message}
-        </p>
+      <div className="flex flex-col gap-1.5">
+        <label className="text-sm font-medium text-neutral-700">Featured Image URL</label>
+        <input
+          type="text"
+          name="featuredImage"
+          value={values.featuredImage}
+          onChange={handleChange}
+          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-emerald-600"
+          placeholder="https://example.com/image.jpg"
+        />
       </div>
 
-      {/* Excerpt */}
-
-      <div>
-        <label className="font-medium">
-          Excerpt
-        </label>
-
+      <div className="flex flex-col gap-1.5">
+        <label className="text-sm font-medium text-neutral-700">Content Description</label>
         <textarea
-          rows={3}
-          {...register("excerpt")}
-          className="mt-2 w-full rounded-lg border p-3"
+          name="content"
+          value={values.content}
+          onChange={handleChange}
+          rows={5}
+          required
+          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-emerald-600"
+          placeholder="Write comprehensive details about the charitable activity here..."
         />
       </div>
 
-      {/* Content */}
-
-      <div>
-        <label className="font-medium">
-          Content
+      <div className="flex items-center gap-6 pt-2">
+        <label className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer">
+          <input
+            type="checkbox"
+            name="published"
+            checked={values.published}
+            onChange={handleChange}
+            className="w-4 h-4 accent-emerald-600"
+          />
+          Publish Publicly
         </label>
 
-        <textarea
-          rows={10}
-          {...register("content")}
-          className="mt-2 w-full rounded-lg border p-3"
-        />
-
-        <p className="text-red-500 text-sm">
-          {errors.content?.message}
-        </p>
-      </div>
-
-      {/* Location */}
-
-      <div>
-        <label className="font-medium">
-          Location
-        </label>
-
-        <input
-          {...register("location")}
-          className="mt-2 w-full rounded-lg border p-3"
-        />
-      </div>
-
-      {/* Event Date */}
-
-      <div>
-        <label className="font-medium">
-          Event Date
-        </label>
-
-        <input
-          type="date"
-          {...register("eventDate")}
-          className="mt-2 w-full rounded-lg border p-3"
-        />
-      </div>
-
-      {/* Featured Image */}
-
-      <div>
-        <label className="font-medium">
-          Featured Image URL
-        </label>
-
-        <input
-          {...register("featuredImage")}
-          className="mt-2 w-full rounded-lg border p-3"
-        />
-      </div>
-
-      {/* Featured */}
-
-      <label className="flex items-center gap-3">
-        <input
-          type="checkbox"
-          {...register("featured")}
-        />
-
-        Featured Activity
-      </label>
-
-      {/* Published */}
-
-      <label className="flex items-center gap-3">
-        <input
-          type="checkbox"
-          {...register("published")}
-        />
-
-        Publish Activity
-      </label>
-
-      {/* SEO */}
-
-      <div>
-        <label className="font-medium">
-          Meta Title
-        </label>
-
-        <input
-          {...register("metaTitle")}
-          className="mt-2 w-full rounded-lg border p-3"
-        />
-      </div>
-
-      <div>
-        <label className="font-medium">
-          Meta Description
-        </label>
-
-        <textarea
-          rows={3}
-          {...register("metaDescription")}
-          className="mt-2 w-full rounded-lg border p-3"
-        />
-      </div>
-
-      <button
-        disabled={loading}
-        className="rounded-lg bg-green-600 px-6 py-3 text-white hover:bg-green-700 disabled:opacity-50"
-      >
-        {loading
-          ? "Saving..."
-          : initialData?.id
-          ? "Update Activity"
-          : "Create Activity"}
-      </button>
-    </form>
-  );
-}
+        <label className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer">
+          <input
+            type="checkbox"
+            name="featured"
+            checked={values.featured}
+            onChange={handleChange}
+            className="w-4 h-4
