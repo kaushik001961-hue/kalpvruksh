@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface ActivityFormProps {
+  categories?: any[]; // 🚀 FIXED: Added categories prop to align with your admin/activities/[id]/edit route requirements
   initialData?: {
     id?: string;
     title?: string;
@@ -23,7 +24,7 @@ interface ActivityFormProps {
   updateActivity: (id: string, data: { title: string; description: string; image?: string | null; date: Date }) => Promise<any>;
 }
 
-export default function ActivityForm({ initialData, createActivity, updateActivity }: ActivityFormProps) {
+export default function ActivityForm({ categories = [], initialData, createActivity, updateActivity }: ActivityFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
