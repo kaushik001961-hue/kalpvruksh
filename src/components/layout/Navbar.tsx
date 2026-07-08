@@ -64,8 +64,9 @@ export default function Navbar() {
                 <User size={22} />
               </Link>
 
+              {/* 🚀 FIXED REDIRECT: Pushes volunteers cleanly straight to your active registration route */}
               <Link
-                href="/volunteer"
+                href="/volunteer/register"
                 className="hidden md:inline-flex items-center text-[15px] font-normal border border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-5 py-2 rounded-full transition-all"
               >
                 Become Volunteer
@@ -104,8 +105,9 @@ export default function Navbar() {
               </Link>
             ))}
             
+            {/* 🚀 FIXED MOBILE REDIRECT */}
             <Link
-              href="/volunteer"
+              href="/volunteer/register"
               onClick={() => setIsOpen(false)}
               className="mt-4 text-center text-base font-normal bg-neutral-100 text-neutral-800 py-3.5 rounded-full hover:bg-neutral-200 transition"
             >
