@@ -2,6 +2,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
+
+export default async function ActivitiesPage() {
   const activities = await prisma.activity.findMany({
     orderBy: {
       date: "desc",
@@ -9,17 +11,26 @@ export const dynamic = "force-dynamic";
   });
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-12">
+    <main className="mx-auto max-w-7xl px-6 py-12">
       <div className="mb-10 text-center">
-        <h1 className="text-4xl font-bold">Our Activities</h1>
-        <p className="mt-4 text-gray-600">
+        <h1 className="text-4xl font-bold text-green-700">
+          Our Activities
+        </h1>
+
+        <p className="mt-3 text-lg text-gray-600">
           Explore the activities conducted by Kalpvruksh Charitable Trust.
         </p>
       </div>
 
       {activities.length === 0 ? (
-        <div className="rounded-xl border bg-white p-16 text-center">
-          <h2 className="text-2xl font-semibold">No Activities Found</h2>
+        <div className="rounded-xl border bg-white p-16 text-center shadow-sm">
+          <h2 className="text-2xl font-semibold">
+            No Activities Found
+          </h2>
+
+          <p className="mt-2 text-gray-500">
+            Activities will appear here once they are added.
+          </p>
         </div>
       ) : (
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -27,7 +38,7 @@ export const dynamic = "force-dynamic";
             <Link
               key={activity.id}
               href={`/activities/${activity.id}`}
-              className="overflow-hidden rounded-xl border bg-white shadow-sm"
+              className="overflow-hidden rounded-xl border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
             >
               {activity.image ? (
                 <img
@@ -36,7 +47,7 @@ export const dynamic = "force-dynamic";
                   className="h-56 w-full object-cover"
                 />
               ) : (
-                <div className="h-56 flex items-center justify-center bg-gray-100">
+                <div className="flex h-56 items-center justify-center bg-gray-100 text-gray-500">
                   No Image
                 </div>
               )}
@@ -46,7 +57,7 @@ export const dynamic = "force-dynamic";
                   {activity.title}
                 </h2>
 
-                <p className="mt-3 text-gray-600">
+                <p className="mt-3 line-clamp-3 text-gray-600">
                   {activity.description}
                 </p>
 
@@ -58,6 +69,6 @@ export const dynamic = "force-dynamic";
           ))}
         </div>
       )}
-    </div>
+    </main>
   );
 }
