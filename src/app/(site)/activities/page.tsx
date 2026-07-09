@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
-export default async function ActivitiesPage() {
+export const dynamic = "force-dynamic";
   const activities = await prisma.activity.findMany({
     orderBy: {
       date: "desc",

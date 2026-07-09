@@ -18,103 +18,70 @@ model User {
 }
 
 model Volunteer {
-  id String @id @default(cuid())
-
-  // User Account
-  userId String? @unique
-  user   User?   @relation(fields: [userId], references: [id])
-
-  // Personal Information
-  firstName     String
-  middleName    String?
-  lastName      String
-  gender        String?
-  dob           DateTime?
-  bloodGroup    String?
-  maritalStatus String?
-  nationality   String    @default("Indian")
-
-  // Contact
-  phone          String
-  alternatePhone String?
-  whatsappNumber String?
-  email          String  @unique
-
-  // Address
-  address  String?
-  city     String
-  district String?
-  state    String?
-  country  String  @default("India")
-  pincode  String?
-
-  // Identity
-  aadhaarNumber  String?
-  panNumber      String?
-  voterId        String?
-  drivingLicense String?
-  passportNumber String?
-
-  // Education
-  education   String?
-  college     String?
-  course      String?
-  passingYear Int?
-
-  // Employment
-  occupation      String?
-  organization    String?
-  designation     String?
-  experienceYears Int?
-
-  // Volunteer Information
-  interest           String
-  skills             String?
-  languages          String?
-  availability       String?
-  preferredLocation  String?
-  previousExperience String?
+  id                 String          @id @default(cuid())
+  phone              String
+  city               String
   message            String?
-
-  // Emergency Contact
-  emergencyName     String?
-  emergencyRelation String?
-  emergencyPhone    String?
-
-  // Medical
-  allergies         String?
-  medicalConditions String?
-  medications       String?
-
-  // Documents
+  createdAt          DateTime        @default(now())
+  userId             String?         @unique
+  address            String?
+  availability       String?
+  country            String          @default("India")
+  education          String?
+  email              String          @unique
+  emergencyName      String?
+  emergencyPhone     String?
+  firstName          String
+  gender             String?
+  languages          String?
+  lastName           String
+  occupation         String?
+  organization       String?
+  pincode            String?
+  skills             String?
+  state              String?
+  updatedAt          DateTime        @updatedAt
+  dob                DateTime?
+  interest           String
+  status             VolunteerStatus @default(PENDING)
   photo              String?
   resume             String?
   aadhaarFile        String?
+  aadhaarNumber      String?
+  allergies          String?
+  alternatePhone     String?
+  approvedAt         DateTime?
+  approvedBy         String?
+  bloodGroup         String?
+  college            String?
+  course             String?
+  designation        String?
+  district           String?
+  drivingLicense     String?
+  emergencyRelation  String?
+  experienceYears    Int?
+  facebook           String?
+  idCardNumber       String?
+  instagram          String?
+  joinedDate         DateTime?
+  linkedin           String?
+  maritalStatus      String?
+  medicalConditions  String?
+  medications        String?
+  middleName         String?
+  nationality        String          @default("Indian")
   panFile            String?
+  panNumber          String?
+  passingYear        Int?
+  passportNumber     String?
   policeVerification String?
-
-  // Social
-  facebook  String?
-  instagram String?
-  linkedin  String?
-
-  // Office Use
-  volunteerCode String?   @unique
-  idCardNumber  String?
-  joinedDate    DateTime?
-  approvedAt    DateTime?
-  approvedBy    String?
-  remarks       String?
-
-  // Status
-  status VolunteerStatus @default(PENDING)
-
-  createdAt          DateTime              @default(now())
-  updatedAt          DateTime              @updatedAt
-  activities         VolunteerActivity[]
-  attendances        VolunteerAttendance[]
-  volunteerSkills    VolunteerSkill[]
-  volunteerDocuments VolunteerDocument[]
+  preferredLocation  String?
+  previousExperience String?
+  remarks            String?
+  volunteerCode      String?         @unique
+  voterId            String?
+  whatsappNumber     String?
+  user               User?           @relation(fields: [userId], references: [id])
 }
 
 model News {
@@ -182,44 +149,6 @@ model Donation {
   amount    Float
   status    DonationStatus @default(PENDING)
   createdAt DateTime       @default(now())
-}
-
-model VolunteerSkill {
-  id          String @id @default(cuid())
-  volunteerId String
-  skill       String
-
-  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
-}
-
-model VolunteerDocument {
-  id          String @id @default(cuid())
-  volunteerId String
-  type        String
-  fileUrl     String
-
-  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
-}
-
-model VolunteerActivity {
-  id           String   @id @default(cuid())
-  volunteerId  String
-  activityName String
-  activityDate DateTime
-  hours        Int?
-  remarks      String?
-
-  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
-}
-
-model VolunteerAttendance {
-  id          String    @id @default(cuid())
-  volunteerId String
-  checkIn     DateTime
-  checkOut    DateTime?
-  eventName   String?
-
-  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
 }
 
 enum Role {
