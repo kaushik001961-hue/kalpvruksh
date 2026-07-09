@@ -1,102 +1,96 @@
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 
-const news = [
-  {
-    slug: "tree-plantation-drive",
-    title: "Tree Plantation Drive Successfully Completed",
-    image: "/images/news1.jpg",
-    date: "June 2026",
-    description:
-      "Over 1,000 trees were planted with the support of volunteers and local communities.",
-  },
-  {
-    slug: "healthcare-camp",
-    title: "Free Health Check-up Camp",
-    image: "/images/news2.jpg",
-    date: "May 2026",
-    description:
-      "Medical professionals provided free health check-ups and medicines to hundreds of beneficiaries.",
-  },
-  {
-    slug: "education-support-program",
-    title: "Educational Kit Distribution",
-    image: "/images/news3.jpg",
-    date: "April 2026",
-    description:
-      "School bags, books and stationery were distributed to underprivileged children.",
-  },
-];
+export default async function LatestNewsSection() {
+  const news = await prisma.news.findMany({
+    take: 3,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
-export default function LatestNews() {
+  if (news.length === 0) return null;
+
   return (
-    <section className="bg-white py-24">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Heading */}
-        <div className="text-center max-w-3xl mx-auto">
-          <span className="inline-block rounded-full bg-green-100 px-5 py-2 font-semibold text-green-700">
-            📰 Latest News
+    <section className="bg-slate-50 py-24">
+      <div className="mx-auto max-w-7xl px-6">
+
+        <div className="mb-14 text-center">
+          <span className="rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
+            LATEST NEWS
           </span>
 
-          <h2 className="mt-6 text-5xl font-bold text-slate-800">
-            Recent
-            <span className="text-green-700"> Updates</span>
+          <h2 className="mt-5 text-4xl font-bold text-slate-900">
+            Latest News
           </h2>
 
-          <p className="mt-6 text-lg leading-8 text-slate-600">
-            Stay updated with our latest activities, campaigns and
-            community initiatives.
+          <p className="mt-4 text-lg text-gray-600">
+            Stay updated with the latest news and announcements from Kalpvruksh Charitable Trust.
           </p>
         </div>
 
-        {/* News Cards */}
-        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+
           {news.map((item) => (
-            <div
-              key={item.slug}
-              className="overflow-hidden rounded-3xl bg-[#F7F9F4] shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+
+            <article
+              key={item.id}
+              className="overflow-hidden rounded-3xl bg-white shadow-md hover:shadow-xl transition"
             >
-              <Image
-                src={item.image}
-                alt={item.title}
-                width={600}
-                height={400}
-                className="h-60 w-full object-cover"
-              />
+              <div className="relative h-64">
 
-              <div className="p-8">
-                <span className="text-sm font-semibold text-green-700">
-                  {item.date}
-                </span>
+                <Image
+                  src={item.image || "/images/news-placeholder.jpg"}
+                  alt={item.title}
+                  fill
+                  className="object-cover"
+                />
 
-                <h3 className="mt-3 text-2xl font-bold text-slate-800">
+              </div>
+
+              <div className="p-6">
+
+                <p className="text-sm text-green-700">
+                  {new Date(item.createdAt).toLocaleDateString()}
+                </p>
+
+                <h3 className="mt-3 text-2xl font-bold">
                   {item.title}
                 </h3>
 
-                <p className="mt-4 leading-7 text-slate-600">
-                  {item.description}
+                <p className="mt-4 line-clamp-3 text-gray-600">
+                  {item.content}
                 </p>
 
                 <Link
-  href={`/news/${item.slug}`}
-  className="text-green-700 font-semibold flex items-center gap-2"
->
-  Read More →
-</Link>
+                  href={`/news/${item.slug}`}
+                  className="mt-5 inline-flex items-center gap-2 font-semibold text-green-700"
+                >
+                  Read More
+                  <ArrowRight size={18} />
+                </Link>
+
               </div>
-            </div>
+
+            </article>
+
           ))}
+
         </div>
 
-        {/* View All */}
-        <div className="mt-16 text-center">
+        <div className="mt-12 text-center">
+
           <Link
             href="/news"
-            className="inline-block rounded-full border-2 border-green-700 px-8 py-4 font-semibold text-green-700 transition hover:bg-green-700 hover:text-white"
+            className="rounded-full bg-green-700 px-8 py-4 text-white font-semibold hover:bg-green-800"
           >
             View All News
           </Link>
+
         </div>
+
       </div>
     </section>
   );
