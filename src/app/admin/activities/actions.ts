@@ -1,37 +1,41 @@
-import React from "react";
-import { notFound } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import ActivityForm from "@/components/activities/ActivityForm";
-import { createActivity, updateActivity } from "../../actions"; // Using relative path backwards from [id]/edit/
+"use server";
 
-interface EditPageProps {
-  params: { id: string };
+import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
+
+export async function createActivity(formData: FormData) {
+  const title = formData.get("title")?.toString() || "";
+  const description = formData.get("description")?.toString() || "";
+
+  await prisma.activity.create({
+    data: {
+      title,
+      description,
+    },
+  });
+
+  revalidatePath("/admin/activities");
 }
 
-export default async function EditActivityPage({ params }: EditPageProps) {
-  const { id } = params;
-  const activity = await prisma.activity.findUnique({ where: { id } });
-  if (!activity) notFound();
+export async function updateActivity(id: string, formData: FormData) {
+  const title = formData.get("title")?.toString() || "";
+  const description = formData.get("description")?.toString() || "";
 
-  return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold text-neutral-900">Modify Activity Settings</h1>
-      <div className="rounded-xl border bg-white p-6 shadow-sm">
-        <ActivityForm
-          categories={[]}
-          createActivity={createActivity}
-          updateActivity={updateActivity}
-          initialData={{
-            id: activity.id,
-            title: activity.title,
-            content: activity.description, 
-            featuredImage: activity.image || "", 
-            eventDate: activity.date ? new Date(activity.date).toISOString().split('T')[0] : "", 
-            published: true, 
-            featured: false,
-          }}
-        />
-      </div>
-    </div>
-  );
+  await prisma.activity.update({
+    where: { id },
+    data: {
+      title,
+      description,
+    },
+  });
+
+  revalidatePath("/admin/activities");
+}
+
+export async function deleteActivity(id: string) {
+  await prisma.activity.delete({
+    where: { id },
+  });
+
+  revalidatePath("/admin/activities");
 }
