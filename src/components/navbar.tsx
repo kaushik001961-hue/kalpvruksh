@@ -1,79 +1,93 @@
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/getUser";
-import LogoutButton from "@/components/LogoutButton";
 import { logout } from "@/actions/auth";
 
-
-export default async function Navbar() {
-  const user = await getCurrentUser();
-
-  console.log("========== NAVBAR ==========");
-  console.log(user);
-
-  return (
-     );
-}
-
 export default async function Navbar() {
   const user = await getCurrentUser();
 
   return (
-    <nav className="flex items-center justify-between px-6 py-4">
-      <div className="font-bold text-xl">
-        Kalpvruksh Trust
+    <header className="sticky top-0 z-50 border-b bg-white shadow-sm">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+        {/* Logo */}
+        <Link href="/" className="text-2xl font-bold text-green-700">
+          🌳 Kalpvruksh Trust
+        </Link>
+
+        {/* Navigation */}
+        <nav className="hidden items-center gap-8 lg:flex">
+          <Link href="/" className="hover:text-green-700">
+            Home
+          </Link>
+          <Link href="/about" className="hover:text-green-700">
+            About
+          </Link>
+          <Link href="/projects" className="hover:text-green-700">
+            Projects
+          </Link>
+          <Link href="/activities" className="hover:text-green-700">
+            Activities
+          </Link>
+          <Link href="/news" className="hover:text-green-700">
+            News
+          </Link>
+          <Link href="/gallery" className="hover:text-green-700">
+            Gallery
+          </Link>
+          <Link href="/contact" className="hover:text-green-700">
+            Contact
+          </Link>
+        </nav>
+
+        {/* Right Side */}
+        <div className="flex items-center gap-3">
+          {user ? (
+            <>
+              <Link
+                href={
+                  user.role === "ADMIN" || user.role === "SUPER_ADMIN"
+                    ? "/admin"
+                    : "/volunteer/dashboard"
+                }
+                className="rounded-full border border-green-600 px-5 py-2 font-medium text-green-700 transition hover:bg-green-50"
+              >
+                Dashboard
+              </Link>
+
+              <form action={logout}>
+                <button
+                  type="submit"
+                  className="rounded-full bg-red-600 px-5 py-2 font-medium text-white transition hover:bg-red-700"
+                >
+                  Logout
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="rounded-full border border-green-600 px-5 py-2 font-medium text-green-700 transition hover:bg-green-50"
+              >
+                Login
+              </Link>
+
+              <Link
+                href="/volunteer/register"
+                className="rounded-full bg-green-600 px-5 py-2 font-medium text-white transition hover:bg-green-700"
+              >
+                Register as Volunteer
+              </Link>
+
+              <Link
+                href="/donate"
+                className="rounded-full bg-orange-500 px-5 py-2 font-medium text-white transition hover:bg-orange-600"
+              >
+                Donate Now
+              </Link>
+            </>
+          )}
+        </div>
       </div>
-
-      <div className="flex gap-6">
-        <Link href="/">Home</Link>
-        <Link href="/about">About</Link>
-        <Link href="/projects">Projects</Link>
-        <Link href="/activities">Activities</Link>
-        <Link href="/news">News</Link>
-        <Link href="/contact">Contact</Link>
-      </div>
-
-      <div className="flex gap-3">
-  {user ? (
-    <>
-      <Link
-        href={
-          user.role === "ADMIN" ||
-          user.role === "SUPER_ADMIN"
-            ? "/admin"
-            : "/volunteer/dashboard"
-        }
-        className="px-4 py-2 border rounded-lg"
-      >
-        Dashboard
-      </Link>
-
-      <form action={logout}>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-red-600 text-white rounded-lg"
-        >
-          Logout
-        </button>
-      </form>
-    </>
-  ) : (
-    <>
-      <Link
-        href="/login"
-        className="px-4 py-2 border rounded-lg"
-      >
-        Login
-      </Link>
-
-      <Link
-        href="/register"
-        className="px-4 py-2 bg-green-600 text-white rounded-lg"
-      >
-        Register
-      </Link>
-    </>
-  )}
-</div>
-    </nav>
+    </header>
   );
 }
