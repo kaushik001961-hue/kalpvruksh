@@ -17,24 +17,22 @@ export default function Navbar() {
 
   return (
     <div className="fixed top-0 left-0 right-0 w-full pt-8 pb-4 z-50 pointer-events-none bg-gradient-to-b from-white via-white/40 to-transparent">
-      <header className="w-[92%] max-w-7xl mx-auto bg-white/95 backdrop-blur-md border border-neutral-200/80 rounded-2xl transition-all pointer-events-auto shadow-sm">
-        <div className="w-full px-4 sm:px-6 lg:px-8">
+   <header className="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-neutral-200"> <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between gap-4 py-3 sm:py-4">
             
             {/* 1. BRAND LOGO AREA */}
             <Link href="/" className="flex items-center gap-4 shrink-0 group">
-              <img 
-                src="/logo.png" 
-                alt="Logo" 
-                className="w-14 h-14 sm:w-16 sm:h-16 object-contain group-hover:scale-105 transition duration-200" 
-              />
-              <div className="flex flex-col justify-center">
-                <span className="text-xl sm:text-2xl font-black text-neutral-900 tracking-tight leading-none">
+             <img
+  src="/logo.png"
+  className="w-10 h-10 sm:w-14 sm:h-14 object-contain"
+/>
+              <div className="flex flex-col">
+                <span className="text-base sm:text-xl lg:text-2xl font-black text-neutral-900 tracking-tight leading-none">
                   Shree Kalpvruksh
                 </span>
-                <span className="text-sm sm:text-base text-neutral-500 tracking-normal mt-1.5 font-normal">
-                  Charitable Trust
-                </span>
+                <span className="hidden sm:block text-sm text-neutral-500">
+  Charitable Trust
+</span>
               </div>
             </Link>
 
@@ -69,11 +67,11 @@ export default function Navbar() {
               </Link>
 
               <Link
-                href="/donate"
-                className="text-[15px] font-normal bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-full shadow-md transition-all"
-              >
-                Donate
-              </Link>
+  href="/donate"
+  className="hidden sm:inline-flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-full shadow-md transition-all"
+>
+  Donate
+</Link>
 
               <button
                 onClick={() => setIsOpen(!isOpen)}
@@ -89,8 +87,7 @@ export default function Navbar() {
 
         {/* --- MOBILE FULLSCREEN OVERLAY PANEL --- */}
         {isOpen && (
-          <div className="absolute top-[105%] left-0 w-full bg-white rounded-2xl border border-neutral-200 shadow-xl px-6 py-8 flex flex-col gap-4 z-50">
-            {navLinks.map((link) => (
+          <div className="fixed left-0 right-0 top-[80px] z-50 bg-white shadow-2xl border-t border-neutral-200 lg:hidden">  {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
