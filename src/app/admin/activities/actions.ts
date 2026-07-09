@@ -3,38 +3,53 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
-export async function createActivity(formData: FormData) {
-  const title = formData.get("title")?.toString() || "";
-  const description = formData.get("description")?.toString() || "";
-
- await prisma.activity.create({
-  data: {
-    title,
-    description,
-    date: new Date(),
-  },
-});
-  revalidatePath("/admin/activities");
+interface ActivityInput {
+  title: string;
+  description: string;
+  image?: string | null;
+  date: Date;
 }
 
-export async function updateActivity(id: string, formData: FormData) {
-  const title = formData.get("title")?.toString() || "";
-  const description = formData.get("description")?.toString() || "";
-
-  await prisma.activity.update({
-    where: { id },
+// Create Activity
+export async function createActivity(data: ActivityInput) {
+  await prisma.activity.create({
     data: {
-      title,
-      description,
+      title: data.title,
+      description: data.description,
+      image: data.image ?? null,
+      date: data.date,
     },
   });
 
   revalidatePath("/admin/activities");
 }
 
+// Update Activity
+export async function updateActivity(
+  id: string,
+  data: ActivityInput
+) {
+  await prisma.activity.update({
+    where: {
+      id,
+    },
+    data: {
+      title: data.title,
+      description: data.description,
+      image: data.image ?? null,
+      date: data.date,
+    },
+  });
+
+  revalidatePath("/admin/activities");
+}
+
+// Delete Activity
 export async function deleteActivity(id: string) {
   await prisma.activity.delete({
-    where: { id },
+    where: {
+      id,
+    },
   });
 
   revalidatePath("/admin/activities");
