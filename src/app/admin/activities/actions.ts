@@ -7,13 +7,13 @@ export async function createActivity(formData: FormData) {
   const title = formData.get("title")?.toString() || "";
   const description = formData.get("description")?.toString() || "";
 
-  await prisma.activity.create({
-    data: {
-      title,
-      description,
-    },
-  });
-
+ await prisma.activity.create({
+  data: {
+    title,
+    description,
+    date: new Date(),
+  },
+});
   revalidatePath("/admin/activities");
 }
 
