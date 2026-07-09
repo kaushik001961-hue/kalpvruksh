@@ -1,48 +1,94 @@
+"use client";
 
-export default function Hero() {
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight, Heart, HandHelping } from "lucide-react";
+import { motion } from "framer-motion";
+
+export default function HeroSection() {
   return (
-   <section
-  className="relative min-h-screen bg-cover bg-center flex items-center justify-center pt-20"
-      style={{
-        backgroundImage: "url('/images/hero.jpg')",
-      }}
-    >
+    <section className="relative overflow-hidden">
 
-      {/* Hero Content */}
-      <div className="relative z-20 flex flex-col items-center justify-center text-center px-6">
+      {/* Background Image */}
 
-        {/* Trust Logo */}
-      //  <img
-      //    src="/images/logo.png"
-       //   alt="Kalpvruksh Trust"
-      //    className="w-[520px] max-w-full"
+      <div className="relative h-[85vh] min-h-[650px] w-full">
+
+        <Image
+          src="/images/hero/hero.jpg"
+          alt="Kalpvruksh Charitable Trust"
+          fill
+          priority
+          className="object-cover"
         />
 
-        {/* Move everything below the logo */}
-        <div className="mt-12">
+        {/* Overlay */}
 
-          {/* Badge */}
-          <div className="inline-flex items-center rounded-full bg-white/15 backdrop-blur-md px-6 py-2 text-white text-lg">
-            🌿 Together We Can Change Lives
-          </div>
+    <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/25 to-transparent" />
 
-              {/* Buttons */}
-          <div className="mt-12 flex flex-col sm:flex-row justify-center gap-6">
+        {/* Content */}
 
+        <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center px-6">
 
-            <button className="rounded-full border border-white px-10 py-4 text-white font-semibold hover:bg-white hover:text-black transition">
-              Become Volunteer
-            </button>
-
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: .8 }}
+           className="max-w-2xl text-white"
+          >
+          </motion.div>
 
         </div>
 
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-white text-4xl">
-        ↓
+      {/* Statistics */}
+
+      <div className="relative z-20 -mt-20 px-6">
+
+        <div className="mx-auto grid max-w-7xl gap-6 rounded-3xl bg-white p-8 shadow-2xl md:grid-cols-4">
+
+          <div className="text-center">
+            <h3 className="text-4xl font-bold text-green-700">
+              5,000+
+            </h3>
+
+            <p className="mt-2 text-gray-600">
+              Lives Impacted
+            </p>
+          </div>
+
+          <div className="text-center">
+            <h3 className="text-4xl font-bold text-green-700">
+              200+
+            </h3>
+
+            <p className="mt-2 text-gray-600">
+              Volunteers
+            </p>
+          </div>
+
+          <div className="text-center">
+            <h3 className="text-4xl font-bold text-green-700">
+              150+
+            </h3>
+
+            <p className="mt-2 text-gray-600">
+              Projects Completed
+            </p>
+          </div>
+
+          <div className="text-center">
+            <h3 className="text-4xl font-bold text-green-700">
+              12+
+            </h3>
+
+            <p className="mt-2 text-gray-600">
+              Years of Service
+            </p>
+          </div>
+
+        </div>
+
       </div>
 
     </section>

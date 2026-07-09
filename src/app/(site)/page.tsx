@@ -11,6 +11,8 @@ import GalleryPreview from "@/components/home/GalleryPreview";
 import Testimonials from "@/components/home/Testimonials";
 import VolunteerCTA from "@/components/home/VolunteerCTA";
 import DonateCTA from "@/components/home/DonateCTA";
+import ImpactSection from "@/components/home/Impact";
+import FeaturedProjectsSection from "@/components/home/FeaturedProjectsSection";
 
 export default function Home() {
   return (
@@ -19,6 +21,8 @@ export default function Home() {
       <Hero />
 
       <About />
+
+      <Impact/>
 
       <MissionVision />
 

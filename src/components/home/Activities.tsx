@@ -1,119 +1,140 @@
-import {
-  Trees,
-  GraduationCap,
-  HeartPulse,
-  Utensils,
-  Users,
-  Handshake,
-} from "lucide-react";
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 const activities = [
   {
-    title: "Tree Plantation",
-    icon: Trees,
-    description:
-      "Promoting a greener future through plantation drives and environmental conservation initiatives.",
-  },
-  {
     title: "Education Support",
-    icon: GraduationCap,
+    image: "/images/activities/education.jpg",
     description:
-      "Providing educational assistance, scholarships and learning opportunities for children.",
+      "Providing scholarships, school kits, digital education and career guidance.",
   },
   {
     title: "Healthcare Camps",
-    icon: HeartPulse,
+    image: "/images/activities/health.jpg",
     description:
-      "Organizing free medical camps and health awareness programs for underserved communities.",
+      "Free medical checkups, blood donation camps and health awareness programs.",
   },
   {
-    title: "Food Distribution",
-    icon: Utensils,
+    title: "Tree Plantation",
+    image: "/images/activities/tree.jpg",
     description:
-      "Supporting needy families through food donation and nutrition assistance programs.",
+      "Building a greener future through plantation drives and environmental campaigns.",
   },
   {
     title: "Women Empowerment",
-    icon: Users,
+    image: "/images/activities/women.jpg",
     description:
-      "Encouraging women through skill development, education and self-employment initiatives.",
+      "Skill development, self-employment training and women welfare initiatives.",
   },
   {
-    title: "Community Development",
-    icon: Handshake,
+    title: "Food Distribution",
+    image: "/images/activities/food.jpg",
     description:
-      "Working together with local communities to improve quality of life and social welfare.",
+      "Providing nutritious meals and grocery support to underprivileged families.",
+  },
+  {
+    title: "Disaster Relief",
+    image: "/images/activities/relief.jpg",
+    description:
+      "Emergency support, rehabilitation and relief activities during natural disasters.",
   },
 ];
 
-export default function Activities() {
+export default function ActivitiesSection() {
   return (
-    <section className="bg-[#F7F9F4] py-24">
+    <section className="py-24 bg-white">
+      <div className="mx-auto max-w-7xl px-6">
 
-      <div className="max-w-7xl mx-auto px-6">
-
-        {/* Heading */}
-
-        <div className="text-center max-w-3xl mx-auto">
-
-          <span className="inline-block rounded-full bg-green-100 px-5 py-2 text-green-700 font-semibold">
-            🌿 Our Activities
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: .6 }}
+          viewport={{ once: true }}
+          className="text-center max-w-3xl mx-auto"
+        >
+          <span className="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
+            OUR ACTIVITIES
           </span>
 
-          <h2 className="mt-6 text-5xl font-bold text-slate-800">
-            Making a Difference
-            <span className="text-green-700"> Every Day</span>
+          <h2 className="mt-6 text-4xl lg:text-5xl font-bold text-slate-900">
+            Transforming Lives Through Service
           </h2>
 
-          <p className="mt-6 text-lg text-slate-600 leading-8">
-            Our initiatives focus on creating sustainable social impact
-            through education, healthcare, environmental conservation,
-            empowerment and community welfare.
+          <p className="mt-5 text-lg text-gray-600">
+            Every initiative is designed to create a lasting positive impact
+            in the lives of individuals and communities.
           </p>
-
-        </div>
-
-        {/* Cards */}
+        </motion.div>
 
         <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 
-          {activities.map((activity, index) => {
+          {activities.map((activity, index) => (
+            <motion.div
+              key={activity.title}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: .6,
+                delay: index * .1,
+              }}
+              viewport={{ once: true }}
+              className="group overflow-hidden rounded-3xl bg-white shadow-md hover:shadow-2xl transition-all duration-500"
+            >
+              <div className="relative h-64 overflow-hidden">
 
-            const Icon = activity.icon;
+                <Image
+                  src={activity.image}
+                  alt={activity.title}
+                  fill
+                  className="object-cover transition duration-700 group-hover:scale-110"
+                />
 
-            return (
-              <div
-                key={index}
-                className="group rounded-3xl bg-white p-8 shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
-              >
+              </div>
 
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 group-hover:bg-green-700 transition">
+              <div className="p-8">
 
-                  <Icon className="h-8 w-8 text-green-700 group-hover:text-white" />
-
-                </div>
-
-                <h3 className="mt-8 text-2xl font-bold text-slate-800">
+                <h3 className="text-2xl font-bold text-slate-900">
                   {activity.title}
                 </h3>
 
-                <p className="mt-4 leading-8 text-slate-600">
+                <p className="mt-4 leading-7 text-gray-600">
                   {activity.description}
                 </p>
 
-                <button className="mt-8 text-green-700 font-semibold hover:text-green-900">
-                  Learn More →
-                </button>
+                <Link
+                  href="/activities"
+                  className="mt-6 inline-flex items-center gap-2 text-green-700 font-semibold hover:gap-3 transition-all"
+                >
+                  Learn More
+
+                  <ArrowRight size={18} />
+                </Link>
 
               </div>
-            );
 
-          })}
+            </motion.div>
+          ))}
+
+        </div>
+
+        <div className="mt-16 text-center">
+
+          <Link
+            href="/activities"
+            className="inline-flex items-center gap-3 rounded-full bg-green-700 px-8 py-4 text-white font-semibold hover:bg-green-800 transition"
+          >
+            View All Activities
+
+            <ArrowRight size={18} />
+          </Link>
 
         </div>
 
       </div>
-
     </section>
   );
 }

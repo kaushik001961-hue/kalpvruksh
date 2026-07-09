@@ -2,8 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import LogoutButton from "../LogoutButton";
-import AuthButtons from "../AuthButtons";
+import LogoutButton from "./LogoutButton";
+import AuthButtons from "./AuthButtons";
 
 interface NavbarClientProps {
   isLoggedIn: boolean;

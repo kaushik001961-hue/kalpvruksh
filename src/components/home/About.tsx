@@ -1,105 +1,116 @@
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, CheckCircle } from "lucide-react";
+import { motion } from "framer-motion";
 
-
-export default function About() {
+export default function AboutSection() {
   return (
-    <section className="bg-[#F7F9F4] py-24">
+    <section className="bg-white py-20 lg:py-28">
+      <div className="mx-auto max-w-7xl px-6">
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="grid items-center gap-16 lg:grid-cols-2">
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Left Images */}
 
-          {/* Left Image */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: .8 }}
+            viewport={{ once: true }}
+            className="relative"
+          >
+            <Image
+              src="/images/about/about1.jpg"
+              alt="About"
+              width={650}
+              height={700}
+              className="rounded-3xl shadow-2xl object-cover"
+            />
 
-          <div className="relative">
+            <div className="absolute -bottom-8 -right-8 rounded-3xl bg-green-700 p-8 text-white shadow-xl">
 
-             <Image
-    src="/images/about.jpg"
-    alt="About Kalpvruksh Trust"
-    width={700}
-    height={700}
-    priority
-    className="w-full h-[550px] rounded-[30px] object-cover shadow-2xl"
-  />
+              <h3 className="text-5xl font-bold">
+                12+
+              </h3>
 
-            <div className="absolute -bottom-8 -right-8 rounded-3xl bg-green-700 text-white px-8 py-6 shadow-xl">
-
-              <h2 className="text-4xl font-bold">10+</h2>
-
-              <p className="text-sm uppercase tracking-widest">
+              <p className="mt-2 text-green-100">
                 Years of Service
               </p>
 
             </div>
-
-          </div>
+          </motion.div>
 
           {/* Right Content */}
 
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: .8 }}
+            viewport={{ once: true }}
+          >
 
-            <span className="inline-block rounded-full bg-green-100 px-5 py-2 text-green-700 font-semibold">
-              🌿 About Kalpvruksh Trust
+            <span className="rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
+              ABOUT US
             </span>
 
-            <h2 className="mt-6 text-5xl font-bold text-slate-800 leading-tight">
-
-              Planting Hope,
-              <br />
-              Nurturing Lives.
-
+            <h2 className="mt-6 text-4xl font-bold text-slate-900 lg:text-5xl">
+              Building Strong Communities Through
+              <span className="text-green-700">
+                {" "}Compassion
+              </span>
             </h2>
 
-            <p className="mt-8 text-lg leading-8 text-slate-600">
-
-              Shree Kalpvruksh Charitable Trust is dedicated to creating
-              meaningful social impact through education, healthcare,
-              environmental conservation and community welfare.
-
+            <p className="mt-6 text-lg leading-8 text-gray-600">
+              Shree Kalpvruksh Charitable Trust is committed to
+              uplifting society through education, healthcare,
+              environmental conservation, youth empowerment,
+              women development and humanitarian services.
             </p>
 
-            <p className="mt-6 text-lg leading-8 text-slate-600">
+            <div className="mt-8 space-y-5">
 
-              We believe that every small contribution can transform lives,
-              empower communities and create a greener, healthier and more
-              compassionate future for generations to come.
+              {[
+                "Education Support Programs",
+                "Medical & Health Camps",
+                "Tree Plantation Drives",
+                "Women Empowerment",
+                "Disaster Relief Activities",
+                "Community Development",
+              ].map((item) => (
 
-            </p>
+                <div
+                  key={item}
+                  className="flex items-center gap-4"
+                >
+                  <CheckCircle className="text-green-600" />
 
-            {/* Mission */}
+                  <span className="text-gray-700">
+                    {item}
+                  </span>
 
-            <div className="mt-10 rounded-3xl bg-white p-8 shadow-lg">
+                </div>
 
-              <h3 className="text-2xl font-bold text-green-700">
-
-                Our Mission
-
-              </h3>
-
-              <p className="mt-4 text-slate-600 leading-7">
-
-                To serve society through education, healthcare,
-                environmental protection and humanitarian initiatives
-                while inspiring sustainable community development.
-
-              </p>
+              ))}
 
             </div>
 
-            {/* Button */}
+            <Link
+              href="/about"
+              className="mt-10 inline-flex items-center gap-3 rounded-full bg-green-700 px-7 py-4 font-semibold text-white hover:bg-green-800 transition"
+            >
+              Learn More
 
-            <button className="mt-10 rounded-full bg-green-700 hover:bg-green-800 transition px-8 py-4 text-white font-semibold shadow-lg">
+              <ArrowRight size={18} />
 
-              Read More →
+            </Link>
 
-            </button>
-
-          </div>
+          </motion.div>
 
         </div>
 
       </div>
-
     </section>
   );
 }
