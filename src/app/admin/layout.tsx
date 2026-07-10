@@ -1,17 +1,26 @@
-import AdminSidebar from "@/components/admin/AdminSidebar";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { verifyToken } from "@/lib/auth";
+import React from "react";
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="flex">
-      <AdminSidebar />
+  const cookieStore = await cookies();
 
-      <main className="flex-1 p-6">
-        {children}
-      </main>
-    </div>
-  );
+  const token = cookieStore.get("token")?.value;
+
+  if (!token) {
+    redirect("/login");
+  }
+
+  const decoded = await verifyToken(token);
+
+  if (!decoded || typeof decoded === "string") {
+    redirect("/login");
+  }
+
+  return <>{children}</>;
 }

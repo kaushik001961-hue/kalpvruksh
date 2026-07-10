@@ -1,113 +1,315 @@
 "use client";
 
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { User, Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Menu, X, User, Heart } from "lucide-react";
 
-export default function Navbar() {
+const navLinks = [
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Activities", href: "/activities" },
+  { name: "Projects", href: "/projects" },
+  { name: "Donate", href: "/donate" },
+];
+
+interface NavbarProps {
+  isLoggedIn?: boolean;
+  role?: string;
+}
+
+export default function Navbar({
+  isLoggedIn = false,
+  role,
+}: NavbarProps) {
+  const pathname = usePathname();
+
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Activities", href: "/activities" },
-    { name: "Projects", href: "/projects" },
-    { name: "Donate", href: "/donate" },
-  ];
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", onScroll);
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 w-full pt-8 pb-4 z-50 pointer-events-none bg-gradient-to-b from-white via-white/40 to-transparent">
-   <header className="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-neutral-200"> <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between gap-4 py-3 sm:py-4">
-            
-            {/* 1. BRAND LOGO AREA */}
-            <Link href="/" className="flex items-center gap-4 shrink-0 group">
-             <img
-  src="/logo.png"
-  className="w-10 h-10 sm:w-14 sm:h-14 object-contain"
-/>
-              <div className="flex flex-col">
-                <span className="text-base sm:text-xl lg:text-2xl font-black text-neutral-900 tracking-tight leading-none">
+    <>
+    <header className="fixed top-2 left-0 right-0 z-[9999]">
+        <div className="max-w-7xl mx-auto px-4">
+
+          <div
+            className={`
+              flex items-center justify-between
+              rounded-full
+              transition-all duration-300
+              border
+              ${
+                scrolled
+                  ? "bg-white shadow-2xl border-neutral-200"
+                  : "bg-white/85 backdrop-blur-xl border-white/40"
+              }
+              px-6 lg:px-8
+              py-3
+            `}
+          >
+
+            {/* LOGO */}
+
+            <Link
+              href="/"
+              className="flex items-center gap-3 shrink-0"
+            >
+              <img
+                src="/logo.png"
+                alt="Logo"
+                className="w-12 h-12 object-contain"
+              />
+
+              <div className="hidden sm:block">
+                <h2 className="text-lg font-extrabold leading-none text-neutral-900">
                   Shree Kalpvruksh
-                </span>
-                <span className="hidden sm:block text-sm text-neutral-500">
-  Charitable Trust
-</span>
+                </h2>
+
+                <p className="text-sm text-neutral-500">
+                  Charitable Trust
+                </p>
               </div>
             </Link>
 
-            {/* 2. DESKTOP NAVIGATION */}
-            <nav className="hidden lg:flex items-center gap-5 xl:gap-7 mx-auto">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="text-[16px] font-normal text-neutral-600 hover:text-emerald-600 transition-colors tracking-wide"
-                >
-                  {link.name}
-                </Link>
-              ))}
+            {/* DESKTOP MENU */}
+
+            <nav className="hidden lg:flex items-center gap-8">
+
+              {navLinks.map((link) => {
+
+                const active = pathname === link.href;
+
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className={`
+                      relative
+                      font-medium
+                      transition-all
+                      duration-300
+                      ${
+                        active
+                          ? "text-emerald-600"
+                          : "text-neutral-700 hover:text-emerald-600"
+                      }
+
+                      after:absolute
+                      after:left-0
+                      after:-bottom-2
+                      after:h-[2px]
+                      after:bg-emerald-600
+                      after:transition-all
+                      ${
+                        active
+                          ? "after:w-full"
+                          : "after:w-0 hover:after:w-full"
+                      }
+                    `}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
+
             </nav>
 
-            {/* 3. ACTION BUTTONS AREA */}
-            <div className="flex items-center gap-3 lg:gap-4 shrink-0">
+            {/* RIGHT BUTTONS */}
+
+            <div className="flex items-center gap-3">
+
               <Link
                 href="/admin"
-                className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-full transition-colors"
-                title="Login"
+                className="hidden lg:flex items-center justify-center
+                w-11 h-11 rounded-full
+                hover:bg-neutral-100 transition"
               >
-                <User size={22} />
+                <User size={20} />
               </Link>
 
               <Link
                 href="/volunteer/register"
-                className="hidden md:inline-flex items-center text-[15px] font-normal border border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-5 py-2.5 rounded-full transition-colors"
+                className="hidden md:flex
+                px-5 py-2.5
+                rounded-full
+                border
+                border-emerald-600
+                text-emerald-700
+                hover:bg-emerald-50
+                transition"
               >
                 Become Volunteer
               </Link>
 
               <Link
-  href="/donate"
-  className="hidden sm:inline-flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-full shadow-md transition-all"
->
-  Donate
-</Link>
+                href="/donate"
+                className="
+                hidden sm:flex
+                items-center
+                gap-2
+                rounded-full
+                bg-emerald-600
+                hover:bg-emerald-700
+                text-white
+                px-6
+                py-2.5
+                shadow-lg
+                transition
+                "
+              >
+                <Heart size={18} />
+                Donate
+              </Link>
 
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-2 text-neutral-600 hover:text-neutral-900 transition-colors lg:hidden focus:outline-none"
-                aria-label="Toggle menu"
+                className="lg:hidden w-11 h-11 rounded-full hover:bg-neutral-100 flex items-center justify-center"
               >
-                {isOpen ? <X size={26} /> : <Menu size={26} />}
+                {isOpen ? <X /> : <Menu />}
               </button>
+
             </div>
 
           </div>
-        </div>
+                    {/* MOBILE MENU */}
 
-        {/* --- MOBILE FULLSCREEN OVERLAY PANEL --- */}
-        {isOpen && (
-          <div className="fixed left-0 right-0 top-[80px] z-50 bg-white shadow-2xl border-t border-neutral-200 lg:hidden">  {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="text-lg font-normal text-neutral-700 hover:text-emerald-600 border-b border-neutral-100 pb-2 transition"
-              >
-                {link.name}
-              </Link>
-            ))}
-            
-            <Link
-              href="/volunteer/register"
-              onClick={() => setIsOpen(false)}
-              className="mt-4 text-center text-base font-normal bg-neutral-100 text-neutral-800 py-3.5 rounded-full hover:bg-neutral-200 transition"
+          {isOpen && (
+            <div
+              className="
+              absolute
+              left-0
+              right-0
+              top-[90px]
+              lg:hidden
+              animate-in
+              fade-in
+              slide-in-from-top-3
+              duration-300
+              "
             >
-              Become Volunteer
-            </Link>
-          </div>
-        )}
+              <div
+                className="
+                mx-3
+                rounded-3xl
+                bg-white
+                shadow-2xl
+                border
+                border-neutral-200
+                p-6
+                "
+              >
+                <nav className="flex flex-col">
+
+                  {navLinks.map((link) => {
+
+                    const active = pathname === link.href;
+
+                    return (
+                      <Link
+                        key={link.name}
+                        href={link.href}
+                        onClick={() => setIsOpen(false)}
+                        className={`
+                          py-4
+                          text-lg
+                          font-medium
+                          border-b
+                          border-neutral-100
+                          transition
+                          ${
+                            active
+                              ? "text-emerald-600"
+                              : "text-neutral-700 hover:text-emerald-600"
+                          }
+                        `}
+                      >
+                        {link.name}
+                      </Link>
+                    );
+
+                  })}
+
+                </nav>
+
+                <div className="mt-6 flex flex-col gap-3">
+
+                  <Link
+                    href="/volunteer/register"
+                    onClick={() => setIsOpen(false)}
+                    className="
+                    w-full
+                    rounded-full
+                    border
+                    border-emerald-600
+                    text-emerald-700
+                    text-center
+                    py-3
+                    hover:bg-emerald-50
+                    transition
+                    "
+                  >
+                    Become Volunteer
+                  </Link>
+
+                  <Link
+                    href="/donate"
+                    onClick={() => setIsOpen(false)}
+                    className="
+                    w-full
+                    rounded-full
+                    bg-emerald-600
+                    hover:bg-emerald-700
+                    text-white
+                    text-center
+                    py-3
+                    transition
+                    "
+                  >
+                    Donate Now
+                  </Link>
+
+                  <Link
+                    href="/admin"
+                    onClick={() => setIsOpen(false)}
+                    className="
+                    w-full
+                    rounded-full
+                    bg-neutral-100
+                    hover:bg-neutral-200
+                    text-neutral-700
+                    text-center
+                    py-3
+                    transition
+                    "
+                  >
+                    {isLoggedIn
+                      ? role === "ADMIN"
+                        ? "Admin Dashboard"
+                        : "Dashboard"
+                      : "Login"}
+                  </Link>
+
+                </div>
+
+              </div>
+            </div>
+          )}
+
+        </div>
       </header>
-    </div>
+
+      {/* Spacer to prevent content hiding behind fixed navbar */}
+    <div className="h-15 lg:h-1" />
+    </>
   );
 }
