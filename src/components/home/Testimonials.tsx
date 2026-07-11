@@ -6,14 +6,14 @@ import { Star } from "lucide-react";
 
 const testimonials = [
   {
-    name: "Amit Patel",
+    name: "Kaushik Bhatt",
     role: "Volunteer",
     image: "/images/testimonials/person1.jpg",
     quote:
       "Working with Kalpvruksh Trust has been one of the most rewarding experiences of my life. Every activity creates a real impact in the community.",
   },
   {
-    name: "Neha Shah",
+    name: "Sandip Bhatt",
     role: "Donor",
     image: "/images/testimonials/person2.jpg",
     quote:
