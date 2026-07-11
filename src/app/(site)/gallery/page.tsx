@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -138,7 +137,6 @@ export default function GalleryPage() {
             <motion.div
               key={item.id}
               layout
-              whileHover={{ scale: 1.02 }}
               className="relative overflow-hidden rounded-3xl bg-white shadow-lg break-inside-avoid cursor-pointer group"
               onClick={() => setSelectedImage(item.image)}
             >
@@ -186,30 +184,33 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* Lightbox */}
+      {/* Lightbox Modal Layer */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div
-            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-6"
+            /* 🟢 Fixed: Changed z-50 to z-[999] and added high opacity bg-black/95 */
+            className="fixed inset-0 z-[999] bg-black/95 flex items-center justify-center p-4 touch-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedImage(null)}
           >
             <button
-              className="absolute top-6 right-6 text-white"
+              className="absolute top-6 right-6 text-white bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors z-[1000]"
               onClick={() => setSelectedImage(null)}
             >
-              <X size={32} />
+              <X size={28} />
             </button>
 
             <motion.img
               src={selectedImage}
-              alt="Gallery"
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.8 }}
-              className="max-h-[90vh] max-w-[90vw] rounded-2xl"
+              alt="Gallery Preview"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 180 }}
+              className="max-h-[85vh] max-w-[95vw] md:max-w-[90vw] rounded-2xl object-contain select-none shadow-2xl"
+              onClick={(e) => e.stopPropagation()} // Keeps click inside modal from closing it
             />
           </motion.div>
         )}
