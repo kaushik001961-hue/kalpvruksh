@@ -60,7 +60,6 @@ export default function Navbar({
           >
 
             {/* Logo */}
-
             <Link
               href="/"
               className="flex items-center gap-4 shrink-0"
@@ -83,11 +82,8 @@ export default function Navbar({
             </Link>
 
             {/* Desktop Navigation */}
-
             <nav className="hidden lg:flex items-center gap-9">
-
               {navLinks.map((link) => {
-
                 const active = pathname === link.href;
 
                 return (
@@ -121,17 +117,13 @@ export default function Navbar({
                     {link.name}
                   </Link>
                 );
-
               })}
-
             </nav>
 
             {/* Right Side */}
-
             <div className="flex items-center gap-4">
 
-                            {/* Login */}
-
+              {/* Login */}
               <Link
                 href={isLoggedIn ? "/admin" : "/login"}
                 className="
@@ -154,48 +146,46 @@ export default function Navbar({
               </Link>
 
               {/* Volunteer Button */}
-
               <Link
                 href="/volunteer/register"
                 className="
-  hidden
-  lg:inline-flex
-  items-center
-  justify-center
-  rounded-full
-  border
-  border-emerald-600
-  text-emerald-700
-  font-medium
-  px-6
-  py-3
-  hover:bg-emerald-50
-  transition-all
-  duration-300
-"
+                  hidden
+                  lg:inline-flex
+                  items-center
+                  justify-center
+                  rounded-full
+                  border
+                  border-emerald-600
+                  text-emerald-700
+                  font-medium
+                  px-6
+                  py-3
+                  hover:bg-emerald-50
+                  transition-all
+                  duration-300
+                "
               >
                 Become Volunteer
               </Link>
 
               {/* Hamburger Menu (Always Visible) */}
-
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label="Toggle Menu"
                 className="
-flex
-lg:hidden
-items-center
-justify-center
-w-12
-h-12
-rounded-2xl
-border
-border-neutral-200
-bg-white
-hover:bg-neutral-50
-transition
-"
+                  flex
+                  lg:hidden
+                  items-center
+                  justify-center
+                  w-12
+                  h-12
+                  rounded-2xl
+                  border
+                  border-neutral-200
+                  bg-white
+                  hover:bg-neutral-50
+                  transition
+                "
               >
                 {isOpen ? (
                   <X
@@ -215,152 +205,142 @@ transition
           </div>
 
           {/* ============================
-              Mobile / Desktop Drawer
+              Mobile / Desktop Drawer (Fixed Background Enclosure)
           ============================ */}
-
           {isOpen && (
             <div
-             className="
-absolute
-top-[78px]
-left-0
-right-0
-animate-in
-fade-in
-slide-in-from-top-3
-duration-300
-"
+              className="
+                absolute
+                top-[78px]
+                left-0
+                right-0
+                animate-in
+                fade-in
+                slide-in-from-top-3
+                duration-300
+                px-3
+              "
             >
-
+              {/* 🟢 Re-nested the content inside the background card element wrapper correctly */}
               <div
                 className="
-                  mx-3
-                  lg:mx-0
                   rounded-[32px]
                   bg-white
                   shadow-2xl
                   border
                   border-neutral-200
                   overflow-hidden
+                  flex flex-col p-6
                 "
-              ></div>
+              >
+                {navLinks.map((link) => {
+                  const active = pathname === link.href;
 
-                              <div className="flex flex-col p-6">
-
-                  {navLinks.map((link) => {
-
-                    const active = pathname === link.href;
-
-                    return (
-                      <Link
-                        key={link.name}
-                        href={link.href}
-                        onClick={() => setIsOpen(false)}
-                        className={`
-                          flex
-                          items-center
-                          justify-between
-                          py-4
-                          px-2
-                          text-lg
-                          font-medium
-                          border-b
-                          border-neutral-100
-                          transition-all
-                          duration-300
-                          ${
-                            active
-                              ? "text-emerald-600"
-                              : "text-neutral-700 hover:text-emerald-600"
-                          }
-                        `}
-                      >
-                        <span>{link.name}</span>
-
-                        {active && (
-                          <span className="w-2 h-2 rounded-full bg-emerald-600" />
-                        )}
-                      </Link>
-                    );
-
-                  })}
-
-                  <div className="mt-6 space-y-3">
-
+                  return (
                     <Link
-                      href="/volunteer/register"
+                      key={link.name}
+                      href={link.href}
                       onClick={() => setIsOpen(false)}
-                      className="
+                      className={`
                         flex
                         items-center
-                        justify-center
-                        rounded-full
-                        border
-                        border-emerald-600
-                        text-emerald-700
+                        justify-between
+                        py-4
+                        px-2
+                        text-lg
                         font-medium
-                        py-3
-                        hover:bg-emerald-50
+                        border-b
+                        border-neutral-100
                         transition-all
-                      "
+                        duration-300
+                        ${
+                          active
+                            ? "text-emerald-600"
+                            : "text-neutral-700 hover:text-emerald-600"
+                        }
+                      `}
                     >
-                      Become Volunteer
+                      <span>{link.name}</span>
+
+                      {active && (
+                        <span className="w-2 h-2 rounded-full bg-emerald-600" />
+                      )}
                     </Link>
+                  );
+                })}
 
-                    <Link
-                      href="/donate"
-                      onClick={() => setIsOpen(false)}
-                      className="
-                        flex
-                        items-center
-                        justify-center
-                        rounded-full
-                        bg-emerald-600
-                        hover:bg-emerald-700
-                        text-white
-                        font-medium
-                        py-3
-                        transition-all
-                      "
-                    >
-                      Donate Now
-                    </Link>
+                <div className="mt-6 space-y-3">
+                  <Link
+                    href="/volunteer/register"
+                    onClick={() => setIsOpen(false)}
+                    className="
+                      flex
+                      items-center
+                      justify-center
+                      rounded-full
+                      border
+                      border-emerald-600
+                      text-emerald-700
+                      font-medium
+                      py-3
+                      hover:bg-emerald-50
+                      transition-all
+                    "
+                  >
+                    Become Volunteer
+                  </Link>
 
-                    <Link
-                      href={isLoggedIn ? "/admin" : "/login"}
-                      onClick={() => setIsOpen(false)}
-                      className="
-                        flex
-                        items-center
-                        justify-center
-                        rounded-full
-                        bg-neutral-100
-                        hover:bg-neutral-200
-                        text-neutral-700
-                        font-medium
-                        py-3
-                        transition-all
-                      "
-                    >
-                      {isLoggedIn
-                        ? role === "ADMIN"
-                          ? "Admin Dashboard"
-                          : "Dashboard"
-                        : "Login"}
-                    </Link>
+                  <Link
+                    href="/donate"
+                    onClick={() => setIsOpen(false)}
+                    className="
+                      flex
+                      items-center
+                      justify-center
+                      rounded-full
+                      bg-emerald-600
+                      hover:bg-emerald-700
+                      text-white
+                      font-medium
+                      py-3
+                      transition-all
+                    "
+                  >
+                    Donate Now
+                  </Link>
 
-                  </div>
-
+                  <Link
+                    href={isLoggedIn ? "/admin" : "/login"}
+                    onClick={() => setIsOpen(false)}
+                    className="
+                      flex
+                      items-center
+                      justify-center
+                      rounded-full
+                      bg-neutral-100
+                      hover:bg-neutral-200
+                      text-neutral-700
+                      font-medium
+                      py-3
+                      transition-all
+                    "
+                  >
+                    {isLoggedIn
+                      ? role === "ADMIN"
+                        ? "Admin Dashboard"
+                        : "Dashboard"
+                      : "Login"}
+                  </Link>
                 </div>
-                              </div>
-            
+              </div>
+            </div>
           )}
 
         </div>
       </header>
 
       {/* Spacer so page content starts below the fixed navbar */}
-     <div className="h-14 lg:h-4" />
+      <div className="h-14 lg:h-4" />
     </>
   );
 }
