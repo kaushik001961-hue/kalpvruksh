@@ -14,8 +14,8 @@ export default function Hero() {
     <section className="relative overflow-hidden">
 
       {/* ========================= HERO ========================= */}
-      {/* 🟢 Adjusted height and min-height to be completely fluid across mobile viewports */}
-      <div className="relative h-[65vh] sm:h-[85vh] lg:h-[92vh] min-h-[480px] sm:min-h-[650px] lg:min-h-[760px] w-full">
+      {/* 🟢 Adjusted heights and removed any forced top padding pushes */}
+      <div className="relative h-[60vh] sm:h-[80vh] lg:h-[92vh] min-h-[420px] sm:min-h-[600px] lg:min-h-[720px] w-full">
 
         <Image
           src="/images/hero/hero.jpg"
@@ -25,11 +25,7 @@ export default function Hero() {
           className="object-cover object-top"
         />
 
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/45 to-black/2" />
-
-        {/* Decorative Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
+        {/* 🟢 Removed the Dark Overlay and Decorative Gradients completely to keep the image original */}
 
         <div className="relative z-10 flex h-full items-center">
           <div className="mx-auto w-full max-w-7xl px-6 lg:px-8">
@@ -41,7 +37,6 @@ export default function Hero() {
             >
               {/* CTA Buttons Space */}
               <div className="mt-10 flex flex-wrap gap-5"></div>
-              {/* Trust Badges Space */}
             </motion.div>
           </div>
         </div>
@@ -51,7 +46,8 @@ export default function Hero() {
       {/* =========================
           Floating Statistics Card
       ========================= */}
-      <div className="relative z-20 -mt-12 sm:-mt-16 lg:-mt-24 px-4 sm:px-6 lg:px-8">
+      {/* 🟢 Adjusted negative margins to pull the card upward cleanly on tighter mobile screens */}
+      <div className="relative z-20 -mt-16 sm:-mt-20 lg:-mt-24 px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -69,7 +65,6 @@ export default function Hero() {
             overflow-hidden
           "
         >
-          {/* 🟢 Made grid single column on super-small devices, stacking cleanly to match the layout spacing */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
 
             <div className="p-6 sm:p-8 text-center border-b sm:border-r border-neutral-100">

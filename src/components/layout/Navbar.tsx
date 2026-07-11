@@ -343,7 +343,7 @@ export default function Navbar({
       </header>
 
       {/* 🟢 Removed the hard height spacer block entirely on mobile so layout begins straight away */}
-      <div className="hidden lg:block lg:h-6" />
+  
     </>
   );
 }
