@@ -40,17 +40,19 @@ export default function Navbar({
 
   return (
     <>
-      <header className="fixed top-1 left-0 right-0 z-[9999]">
-        <div className="max-w-7xl mx-auto px-4">
+      {/* 🟢 Removed padding from parent wrapper to avoid shifting things rightward on small viewports */}
+      <header className="fixed top-2 left-0 right-0 z-[9999] w-full">
+        <div className="max-w-7xl mx-auto px-4 w-full">
 
           <div
             className={`
               flex items-center justify-between
               rounded-full
-              px-8 lg:px-10
-              py-4
+              px-6 sm:px-8 lg:px-10
+              py-3 sm:py-4
               transition-all
               duration-300
+              w-full
               ${
                 scrolled
                   ? "bg-white shadow-2xl border border-neutral-200"
@@ -67,7 +69,7 @@ export default function Navbar({
               <img
                 src="/logo.png"
                 alt="Kalpvruksh"
-                className="w-14 h-14 object-contain"
+                className="w-12 h-12 sm:w-14 sm:h-14 object-contain"
               />
 
               <div className="hidden sm:block">
@@ -177,9 +179,11 @@ export default function Navbar({
                   lg:hidden
                   items-center
                   justify-center
-                  w-12
-                  h-12
-                  rounded-2xl
+                  w-11
+                  h-11
+                  sm:w-12
+                  sm:h-12
+                  rounded-full
                   border
                   border-neutral-200
                   bg-white
@@ -189,12 +193,12 @@ export default function Navbar({
               >
                 {isOpen ? (
                   <X
-                    size={24}
+                    size={22}
                     className="text-neutral-700"
                   />
                 ) : (
                   <Menu
-                    size={24}
+                    size={22}
                     className="text-neutral-700"
                   />
                 )}
@@ -211,17 +215,16 @@ export default function Navbar({
             <div
               className="
                 absolute
-                top-[78px]
+                top-[72px]
                 left-0
                 right-0
                 animate-in
                 fade-in
                 slide-in-from-top-3
                 duration-300
-                px-3
+                px-4
               "
             >
-              {/* 🟢 Re-nested the content inside the background card element wrapper correctly */}
               <div
                 className="
                   rounded-[32px]
@@ -339,8 +342,8 @@ export default function Navbar({
         </div>
       </header>
 
-      {/* Spacer so page content starts below the fixed navbar */}
-      <div className="h-14 lg:h-4" />
+      {/* 🟢 Removed the hard height spacer block entirely on mobile so layout begins straight away */}
+      <div className="hidden lg:block lg:h-6" />
     </>
   );
 }
